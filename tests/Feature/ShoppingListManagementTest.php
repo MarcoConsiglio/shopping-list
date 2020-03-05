@@ -9,6 +9,8 @@ use App\User;
 
 class ShoppingListManagementTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Un utente può vedere un indice delle sue liste della spesa.
      * @test
