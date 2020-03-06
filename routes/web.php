@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource("shopping_list", "ShoppingListController")->only([
+    "index"
+]);
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
