@@ -42,12 +42,12 @@ class ShoppingListController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ShoppingList  $shoppingList
+     * @param  \App\ShoppingList  $shopping_list
      * @return \Illuminate\Http\Response
      */
-    public function show(ShoppingList $shoppingList)
+    public function show(ShoppingList $shopping_list)
     {
-        //
+        return view("shopping_list.show", $shopping_list);
     }
 
     /**
