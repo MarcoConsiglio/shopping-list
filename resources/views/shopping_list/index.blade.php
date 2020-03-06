@@ -1,0 +1,13 @@
+@extends('layouts.standard')
+@section('content')
+<h3 class="text-center display-4"></h3>
+@foreach ($shopping_lists as $shopping_list)
+<a href="{{route("shopping_list.show")}}">
+    <div class="card-body">
+        <div class="card">
+            <h4 class="card-title">{{$shopping_list->title}}</h4>
+        </div>
+    </div>
+</a>
+@endforeach
+@endsection
