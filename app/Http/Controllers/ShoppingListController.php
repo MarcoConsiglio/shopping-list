@@ -83,4 +83,12 @@ class ShoppingListController extends Controller
     {
         //
     }
+
+    /**
+     * All methods of this controller requires authentication.
+     */
+    public function __construct()
+    {
+        $this->middleware("auth");
+    }
 }
