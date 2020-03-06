@@ -15,6 +15,8 @@ class CreateShoppingListsTable extends Migration
     {
         Schema::create('shopping_lists', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
+            $table->string("title")->required();
             $table->timestamps();
         });
     }
