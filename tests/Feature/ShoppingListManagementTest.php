@@ -13,18 +13,35 @@ class ShoppingListManagementTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Un utente può vedere un indice delle sue liste della spesa.
+     * A User can view ShoppingLists.
      * @test
      */
     public function a_user_can_view_shopping_lists_index()
     {
         // Arrange
         $user = factory(User::class)->create();
-        $user->shopping_lists()->save(factory(ShoppingList::class)->make());
+        $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
         $this->be($user);
 
         // Act & Assert
         $this->get(route("shopping_list.index"))
-             ->assertViewIs("shopping_list.index");
+             ->assertViewIs("shopping_list.index")
+             ->assertSee($shopping_list->title);
     }
+
+    /**
+     * A User can view ShoppingList items.
+     * @test
+     */
+    public function a_user_can_view_shopping_list_items()
+    {
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
+
+        // Act & Assert
+        $this->get(route("shopping_list.index", $shopping_list))
+             ->assertViewIs("shopping_list.show");
+    }
+
 }
