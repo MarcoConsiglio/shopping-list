@@ -14,7 +14,8 @@ class ShoppingListController extends Controller
      */
     public function index()
     {
-        //
+        $shopping_lists = auth()->user()->shopping_lists;
+        return view("shopping_list.index", compact("shopping_lists"));
     }
 
     /**
