@@ -18,15 +18,18 @@ class ShoppingListManagementTest extends TestCase
      */
     public function a_user_can_view_shopping_lists_index()
     {
+        $this->withoutExceptionHandling();
         // Arrange
         $user = factory(User::class)->create();
         $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
         $this->be($user);
 
-        // Act & Assert
-        $this->get(route("shopping_list.index"))
-             ->assertViewIs("shopping_list.index")
-             ->assertSee($shopping_list->title);
+        // Act
+        $response = $this->get(route("shopping_list.index", $shopping_list));
+
+        // Assert
+        $response->assertViewIs("shopping_list.index")
+                 ->assertSee($shopping_list->title);
     }
 
     /**
@@ -39,9 +42,12 @@ class ShoppingListManagementTest extends TestCase
         $user = factory(User::class)->create();
         $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
 
-        // Act & Assert
-        $this->get(route("shopping_list.index", $shopping_list))
-             ->assertViewIs("shopping_list.show");
+        // Act
+        $response = $this->get(route("shopping_list.show", $shopping_list));
+
+        // Assert
+        $response->assertViewIs("shopping_list.show")
+                 ->assertSee($shopping_list->title);
     }
 
 }
