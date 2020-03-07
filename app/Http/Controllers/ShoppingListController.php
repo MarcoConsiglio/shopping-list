@@ -47,7 +47,7 @@ class ShoppingListController extends Controller
      */
     public function show(ShoppingList $shopping_list)
     {
-        return view("shopping_list.show", $shopping_list);
+        return view("shopping_list.show", compact("shopping_list"));
     }
 
     /**
