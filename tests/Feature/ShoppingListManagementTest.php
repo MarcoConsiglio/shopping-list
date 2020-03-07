@@ -41,13 +41,15 @@ class ShoppingListManagementTest extends TestCase
         // Arrange
         $user = factory(User::class)->create();
         $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
+        $this->be($user);
 
         // Act
         $response = $this->get(route("shopping_list.show", $shopping_list));
 
         // Assert
-        $response->assertViewIs("shopping_list.show")
-                 ->assertSee($shopping_list->title);
+        $response->assertViewIs("shopping_list.show");
+    }
+
     }
 
 }
