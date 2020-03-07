@@ -39,6 +39,11 @@ class User extends Authenticatable
     ];
 
 
+    /**
+     * A User can have zero or more ShoppingLists.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function shopping_lists()
     {
         return $this->hasMany(ShoppingList::class);
