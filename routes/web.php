@@ -24,3 +24,7 @@ Route::resource("shopping_list", "ShoppingListController")->only([
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
