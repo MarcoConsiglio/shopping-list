@@ -68,9 +68,9 @@ class ShoppingListController extends Controller
      * @param  \App\ShoppingList  $shoppingList
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ShoppingList $shoppingList)
+    public function update(Request $request, ShoppingList $shopping_list)
     {
-        $shoppingList->update($request->all());
+        $shopping_list->update($request->all());
         return redirect(route("shopping_list.index"));
     }
 

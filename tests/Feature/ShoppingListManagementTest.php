@@ -68,16 +68,20 @@ class ShoppingListManagementTest extends TestCase
                      factory(ShoppingList::class)->make()
                  );
         $this->be($user);
+        $edited_shopping_list = $shopping_list;
+        $edited_shopping_list->title = $this->faker->sentence(4);
+        $attributes = $edited_shopping_list->getAttributes();
+        unset($attributes["updated_at"]);
 
         // Act
-        $shopping_list->title = $this->faker->sentence(4);
-        $response = $this->put(route("shopping_list.update", $shopping_list), compact("shopping_list"));
+        $response = $this->put(
+            route("shopping_list.update", $edited_shopping_list),
+            $attributes
+        );
 
         // Assert
-        $response->assertViewIs("shopping_list.index");
-        $attributes = $shopping_list->toArray();
-        unset($attributes["updated_at"]);
-        $this->assertDatabaseHas($shopping_list->table_name, $shopping_list->raw());
+        $response->assertRedirect(route("shopping_list.index"));
+        $this->assertDatabaseHas("shopping_lists", $attributes);
     }
 
 }
