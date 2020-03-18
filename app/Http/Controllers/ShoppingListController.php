@@ -70,7 +70,8 @@ class ShoppingListController extends Controller
      */
     public function update(Request $request, ShoppingList $shoppingList)
     {
-        //
+        $shoppingList->update($request->all());
+        return redirect(route("shopping_list.index"));
     }
 
     /**

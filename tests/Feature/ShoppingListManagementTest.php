@@ -71,7 +71,7 @@ class ShoppingListManagementTest extends TestCase
 
         // Act
         $shopping_list->title = $this->faker->sentence(4);
-        $response = $this->get(route("shopping_list.update", $shopping_list));
+        $response = $this->put(route("shopping_list.update", $shopping_list), compact("shopping_list"));
 
         // Assert
         $response->assertViewIs("shopping_list.index");
