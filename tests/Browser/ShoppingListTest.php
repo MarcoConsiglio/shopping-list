@@ -17,7 +17,7 @@ class ShoppingListTest extends DuskTestCase
      */
     public function a_user_can_view_shopping_lists_collection()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
         // Arrange
         $user = factory(User::class)->create();
         $shopping_list = $user->shopping_lists()->save(
