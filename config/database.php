@@ -45,7 +45,7 @@ return [
 
         'dusk' => [
             'driver' => 'sqlite',
-            'database' => ":memory:",
+            'database' => env('DB_DATABASE', database_path('dusk_database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
