@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::resource("shopping_list", "ShoppingListController")->only([
-    "index", "show", "edit", "update"
+    "index", "show", "update"
 ]);
 
 Auth::routes();

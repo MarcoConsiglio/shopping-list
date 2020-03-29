@@ -50,16 +50,16 @@ class ShoppingListController extends Controller
         return view("shopping_list.show", compact("shopping_list"));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ShoppingList  $shoppingList
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ShoppingList $shoppingList)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  *
+    //  * @param  \App\ShoppingList  $shoppingList
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function edit(ShoppingList $shoppingList)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.

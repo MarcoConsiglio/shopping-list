@@ -3,22 +3,30 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit {{$shopping_list->name}}</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Modifica {{$shopping_list->title}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="{{route("shopping_list.update")}}">
-            <div class="modal-body">
-              <div class="form-group">
-                  <label for="title">Title</label>
-                  <input type="text" name="title" id="title" class="form-group" required>
-              </div>
+        <form action="{{route("shopping_list.update", $shopping_list)}}" method="POST">
+            @csrf
+            @method('PUT')
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="title">Titolo</label>
+              <input
+                value="{{$shopping_list->title}}"
+                type="text"
+                name="title"
+                id="title"
+                class="form-control"
+                required>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-danger text-white">Save changes</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+            <button dusk="edit_modal_button_{{$shopping_list->id}}" type="submit" class="btn btn-warning text-white">Modifica</button>
+          </div>
         </form>
       </div>
     </div>
