@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Chiudi</button>
             <button dusk="edit_modal_button_{{$shopping_list->id}}" type="submit" class="btn btn-warning text-white">Modifica</button>
           </div>
         </form>
