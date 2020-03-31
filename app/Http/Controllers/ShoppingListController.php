@@ -82,7 +82,8 @@ class ShoppingListController extends Controller
      */
     public function destroy(ShoppingList $shoppingList)
     {
-        //
+        $shoppingList->delete();
+        return redirect(route("shopping_list.index"));
     }
 
     /**

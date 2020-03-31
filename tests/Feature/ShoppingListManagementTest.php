@@ -59,14 +59,12 @@ class ShoppingListManagementTest extends TestCase
      */
     public function a_user_can_edit_shopping_list()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
         // Arrange
         $user = factory(User::class)->create();
         $shopping_list =
             $user->shopping_lists()
-                 ->save(
-                     factory(ShoppingList::class)->make()
-                 );
+                 ->save(factory(ShoppingList::class)->make());
         $this->be($user);
         $edited_shopping_list = $shopping_list;
         $edited_shopping_list->title = $this->faker->sentence(4);
@@ -84,4 +82,27 @@ class ShoppingListManagementTest extends TestCase
         $this->assertDatabaseHas("shopping_lists", $attributes);
     }
 
+    /**
+     * Un utente può eliminare una lista della spesa
+     * @test
+     */
+    public function a_use_can_delete_a_shopping_list()
+    {
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list =
+            $user->shopping_lists()
+                 ->save(factory(ShoppingList::class)->make());
+        $attributes = $shopping_list->getAttributes();
+        $this->be($user);
+
+        // Act
+        $response = $this->delete(
+            route("shopping_list.destroy", $shopping_list)
+        );
+
+        // Assert
+        $response->assertRedirect(route("shopping_list.index"));
+        $this->assertDatabaseMissing("shopping_lists", $attributes);
+    }
 }
