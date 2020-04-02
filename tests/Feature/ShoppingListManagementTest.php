@@ -86,7 +86,7 @@ class ShoppingListManagementTest extends TestCase
      * Un utente può eliminare una lista della spesa
      * @test
      */
-    public function a_use_can_delete_a_shopping_list()
+    public function a_user_can_delete_a_shopping_list()
     {
         // Arrange
         $user = factory(User::class)->create();
@@ -104,5 +104,29 @@ class ShoppingListManagementTest extends TestCase
         // Assert
         $response->assertRedirect(route("shopping_list.index"));
         $this->assertDatabaseMissing("shopping_lists", $attributes);
+    }
+
+    /**
+     * Un utente può creare una lista della spesa.
+     * @test
+     */
+    public function a_user_can_create_a_shopping_list()
+    {
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list =
+            $user->shopping_lists()
+                 ->save(factory(ShoppingList::class)->make());
+        $attributes = $shopping_list->getAttributes();
+        $this->be($user);
+
+        // Act
+        $response = $this->post(
+            route("shopping_list.store", $shopping_list)
+        );
+
+        // Assert
+        $response->assertRedirect(route("shopping_list.index"));
+        $this->assertDatabaseHas("shopping_lists", $attributes);
     }
 }
