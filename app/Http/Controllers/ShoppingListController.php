@@ -36,7 +36,10 @@ class ShoppingListController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        auth()->user()->shopping_lists()->save(
+            new ShoppingList($request->all())
+        );
+        return redirect(route("shopping_list.index"));
     }
 
     /**
