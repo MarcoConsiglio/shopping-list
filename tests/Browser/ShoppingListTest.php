@@ -92,4 +92,29 @@ class ShoppingListTest extends DuskTestCase
             });
     }
 
+    /**
+     * Un utente può creare una lista della spesa.
+     * @test
+     */
+    public function a_user_can_create_a_shopping_list()
+    {
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list = factory(ShoppingList::class)->make();
+
+        // Act & Assert
+        $this->browse(
+            function (Browser $browser) use ($user, $shopping_list) {
+                $browser->loginAs($user)
+                        ->visit(route("shopping_list.index"))
+                        ->click("@create_button")
+                        ->whenAvailable("#createModal",
+                        function ($modal) use ($shopping_list){
+                            $modal->type('title', $shopping_list->title)
+                                ->click("@create_modal_button")
+                                ->assertRouteIs("shopping_list.index");
+                        });
+                $browser->assertSee($shopping_list->title);
+            });
+    }
 }
