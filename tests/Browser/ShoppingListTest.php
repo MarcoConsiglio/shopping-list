@@ -108,11 +108,12 @@ class ShoppingListTest extends DuskTestCase
                 $browser->loginAs($user)
                         ->visit(route("shopping_list.index"))
                         ->click("@delete_button_{$shopping_list->id}")
-                        ->whenAvailable('.modal', function ($modal) use ($shopping_list){
-                            $modal->assertSee($shopping_list->title)
-                                ->click("@delete_modal_button_{$shopping_list->id}")
-                                ->assertRouteIs("shopping_list.index");
-                });
+                        ->whenAvailable("#delete_modal_{$shopping_list->id}",
+                            function ($modal) use ($shopping_list){
+                                $modal->assertSee($shopping_list->title)
+                                    ->click("@delete_modal_button_{$shopping_list->id}")
+                                    ->assertRouteIs("shopping_list.index");
+                            });
             });
     }
 
