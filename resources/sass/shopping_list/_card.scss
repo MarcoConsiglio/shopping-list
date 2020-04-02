@@ -1,3 +1,6 @@
-.card.shopping-list {
-    max-width: 12rem;
+.card {
+    &.shopping-list {
+        width: 12rem;
+        max-height: 10rem;
+    }
 }

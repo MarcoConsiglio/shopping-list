@@ -1,5 +1,5 @@
 <!-- Edit ShoppingList -->
-<div class="modal fade" id="edit_modal_{{$shopping_list->id}}" tabindex="-1" role="dialog" aria-labelledby="editShoppingList{{$shopping_list->id}}Label" aria-hidden="true">
+<div class="modal" id="edit_modal_{{$shopping_list->id}}" tabindex="-1" role="dialog" aria-labelledby="editShoppingList{{$shopping_list->id}}Label" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">

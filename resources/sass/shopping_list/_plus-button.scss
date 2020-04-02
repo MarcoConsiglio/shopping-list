@@ -1,0 +1,12 @@
+$plus_button_color: #28a745;
+$radius: 38px;
+.plus-button {
+    background-color: $plus_button_color;
+    width: $radius;
+    height: $radius;
+    border-radius: $radius;
+    padding-top: 5px;
+    padding-left: 6px;
+    bottom: 10px;
+    right: 10px;
+}
