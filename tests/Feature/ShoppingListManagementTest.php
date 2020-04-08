@@ -114,19 +114,18 @@ class ShoppingListManagementTest extends TestCase
     {
         // Arrange
         $user = factory(User::class)->create();
-        $shopping_list =
-            $user->shopping_lists()
-                 ->save(factory(ShoppingList::class)->make());
+        $shopping_list = factory(ShoppingList::class)->make();
         $attributes = $shopping_list->getAttributes();
         $this->be($user);
 
         // Act
         $response = $this->post(
-            route("shopping_list.store", $shopping_list)
+            route("shopping_list.store"),
+            $attributes
         );
 
         // Assert
-        $response->assertRedirect(route("shopping_list.index"));
         $this->assertDatabaseHas("shopping_lists", $attributes);
+        $response->assertRedirect(route("shopping_list.index"));
     }
 }
