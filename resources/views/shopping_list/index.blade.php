@@ -12,7 +12,7 @@
         @foreach($shopping_lists as $shopping_list)
         <div class="card shopping-list">
             <div class="card-body d-flex">
-                <a href="{{route("shopping_list.show", $shopping_list)}}">
+                <a dusk="shopping_list_{{$shopping_list->id}}" href="{{route("shopping_list.show", $shopping_list)}}">
                     <h4 class="card-title text-truncate overflow-hidden" style="width: 160px">{{$shopping_list->title}}</h4>
                 </a>
             </div>

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
-use App\{User, ShoppingList};
+use App\{User, ShoppingList, Product};
 
 class ShoppingListTest extends DuskTestCase
 {
@@ -116,5 +116,31 @@ class ShoppingListTest extends DuskTestCase
                         });
                 $browser->assertSee($shopping_list->title);
             });
+    }
+
+    /**
+     *  Un utente può vedere una lista della spesa.
+     *  @test
+     */
+    public function a_user_can_view_a_shopping_list()
+    {
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list = factory(ShoppingList::class)->make();
+        $user->shopping_lists()->save($shopping_list);
+        $shopping_list->refresh();
+        $product = factory(Product::class)->make();
+        $shopping_list->products()->save($product);
+        $product->refresh();
+
+        // Act & Assert
+        $this->browse(
+            function (Browser $browser) use ($user, $shopping_list, $product) {
+                $browser->loginAs($user)
+                        ->visit(route("shopping_list.index"))
+                        ->click("@shopping_list_{$shopping_list->id}")
+                        ->assertSee("{$product->name}");
+            }
+        );
     }
 }
