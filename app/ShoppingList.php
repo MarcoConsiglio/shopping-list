@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Product;
+use App\{Product, User};
 
 class ShoppingList extends Model
 {
@@ -12,5 +12,10 @@ class ShoppingList extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class);
     }
 }

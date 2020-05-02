@@ -38,7 +38,7 @@
 
 .list-header-container
 {
-  margin-top: 56px;
+  margin-top: 55px;
   z-index: 1020;
 
   @media screen and (min-width: $xl)
@@ -47,7 +47,7 @@
 
     > div
     {
-      width: $col-2-3 !important;
+      width: $col-1-1 !important;
     }
   }
 }

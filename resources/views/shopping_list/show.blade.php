@@ -1,12 +1,7 @@
 @extends("layouts.standard")
 @section("content")
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-xl-2"></div>
-    <div class="col">
-
       <!-- Table header -->
-      <div class="list-header-container col fixed-top mx-xl-auto py-2 d-flex flex-column justify-content-center text-center font-weight-bold bg-light rounded-bottom">
+      <div class="list-header-container mx-xl-auto py-2 d-flex flex-column justify-content-center text-center font-weight-bold bg-light rounded-bottom sticky-top">
         <div class="d-flex flex-column justify-content-center mx-xl-auto w-100">
           <div class="d-md-flex">
             <div class="d-flex py-1 w-md-60 w-lg-40 justify-content-around">
@@ -45,9 +40,6 @@
       <!-- End table header -->
 
       <!-- Table body -->
-      <div class="list-extra-space">
-
-      </div>
       @if ($errors->any())
           <div class="alert alert-danger">
               <ul>
@@ -72,7 +64,7 @@
                     {{$product->brand}}
                   </div>
                   <div class="price">
-                    € {{number_format($product->product->price, 2)}}
+                    € {{number_format($product->price, 2)}}
                   </div>
                 </div>
                 <div class="d-flex w-md-40 w-lg-60 justify-content-around py-1">
@@ -91,7 +83,7 @@
                 <div class="note w-sm-50 d-lg-none">
                   <small>{{$product->note}}</small>
                 </div>
-                @include('product.buttons.actions')
+                {{-- @include('product.buttons.actions') --}}
               </div>
             </div>
           </div><!-- .list-item -->
@@ -103,11 +95,5 @@
           La lista è vuota.
         </div>
       @endif
-
-
-    </div><!-- .col -->
-    <div class="col-xl-2"></div>
-  </div>
-</div>
 @endsection
 

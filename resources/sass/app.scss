@@ -1,11 +1,11 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// Font
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,700;1,300&display=swap');
 
 // Font Awesome
 @import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
@@ -14,3 +14,5 @@
 
 // App Style
 @import "shopping_list/style";
+
+

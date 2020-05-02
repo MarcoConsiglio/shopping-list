@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration
 {
+    private $table_name = "products";
     /**
      * Run the migrations.
      *
@@ -13,10 +14,19 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('shopping_list_id');
-            $table->timestamps();
+            $table->string("name");
+            $table->string("brand")->nullable()->default(null);
+            $table->float("price")->nullable()->default(null);
+            $table->float('quantity')->unsigned()->nullable()->default(1);
+            $table->float("cart_quantity")->unsigned()->nullable()->default(0);
+            $table->string("measure")->nullable()->default(null);
+            $table->string("note")->nullable()->default(null);
+            $table->foreignId("shopping_list_id")
+                  ->constrained("shopping_lists")
+                  ->onDelete("cascade")
+                  ->onUpdate("cascade");
         });
     }
 
@@ -27,6 +37,12 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        if($this->isSQLite())
+        {
+            Schema::table($this->table_name, function(Blueprint $table){
+                $table->dropforeign(["shopping_list_id"]);
+            });
+        }
+        Schema::dropIfExists($this->table_name);
     }
 }

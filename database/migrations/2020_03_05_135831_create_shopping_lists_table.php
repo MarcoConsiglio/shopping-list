@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateShoppingListsTable extends Migration
 {
+    private $table_name = "shopping_lists";
+
     /**
      * Run the migrations.
      *
@@ -15,8 +17,11 @@ class CreateShoppingListsTable extends Migration
     {
         Schema::create('shopping_lists', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
             $table->string("title")->required();
+            $table->foreignId('user_id')
+                  ->constrained("users")
+                  ->onDelete("cascade")
+                  ->onUpdate("cascade");
             $table->timestamps();
         });
     }
@@ -28,6 +33,13 @@ class CreateShoppingListsTable extends Migration
      */
     public function down()
     {
+        if($this->isSQLite())
+        {
+            Schema::table($this->table_name, function(Blueprint $table){
+                $table->dropforeign(["user_id"]);
+            });
+        }
         Schema::dropIfExists('shopping_lists');
+
     }
 }
