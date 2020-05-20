@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\ShoppingList;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -33,9 +34,20 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, ShoppingList $shopping_list)
     {
-        //
+        $attributes = $request->validate([
+            "name"      => "required|min:3|max:50",
+            "brand"     => "max:50",
+            "price"     => "numeric|min:0|max:1000",
+            "quantity"  => "numeric|min:1|max:100",
+            "cart_quantity" => "nullable|numeric",
+            "measure"   => "nullable|string",
+            "note"      => "nullable|string"
+        ]);
+        $product = new Product($attributes);
+        $shopping_list->products()->save($product);
+        return redirect(route("shopping_list.show", compact("shopping_list")));
     }
 
     /**
@@ -81,5 +93,15 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    /**
+     * All methods of this controller requires authentication.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware("auth");
     }
 }

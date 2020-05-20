@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +23,6 @@ Route::resource("shopping_list", "ShoppingListController")->only([
     "index", "show", "update", "destroy", "store"
 ]);
 
-Auth::routes();
+Route::post("store-product/in-shopping-list/{shopping_list}", "ProductController@store")->name("product.store");
 
 Route::get('/home', 'HomeController@index')->name('home');

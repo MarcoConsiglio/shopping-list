@@ -69,8 +69,12 @@ $factory->define(Product::class, function (Faker $faker) {
         $quantity = $faker->randomDigit;
         $cart_quantity = $faker->randomElement([$quantity, 0]);
     }
+    do
+    {
+        $name = $faker->word;
+    } while(strlen($name) < 3);
     return [
-        "name" => $faker->word,
+        "name" => $name,
         "brand" => $faker->word,
         "price" => $faker->randomFloat(2, 0, 23),
         "quantity" => $quantity,

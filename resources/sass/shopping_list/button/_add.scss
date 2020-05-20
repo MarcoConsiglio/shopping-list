@@ -1,13 +1,15 @@
 $plus_button_color: #28a745;
-$radius: 38px;
-.add-button
-{
-  position: fixed;
-  z-index: 1;
-  bottom: 20px;
-  right: 20px;
-  width: $radius;
-  height: $radius;
-  border-radius: $radius;
-  @include box-shadow(4px, 0px);
+$size: 36px;
+.plus-button {
+    position: fixed;
+    right: 24px;
+    bottom: 21px;
+    z-index: 1030;
+    background-color: $plus_button_color;
+    width: $size;
+    height: $size;
+    & i {
+        margin-top: 4px;
+        margin-left: 5px;
+    }
 }

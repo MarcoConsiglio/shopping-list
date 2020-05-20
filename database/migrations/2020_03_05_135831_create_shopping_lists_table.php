@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateShoppingListsTable extends Migration
 {
+    use SQLiteMigration;
+
     private $table_name = "shopping_lists";
 
     /**

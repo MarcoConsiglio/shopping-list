@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration
 {
+    use SQLiteMigration;
+
     private $table_name = "products";
+
     /**
      * Run the migrations.
      *

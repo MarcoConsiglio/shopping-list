@@ -8,7 +8,7 @@ use Tests\TestCase;
 use App\User;
 use App\ShoppingList;
 
-class ShoppingListManagementTest extends TestCase
+class ShoppingListTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
