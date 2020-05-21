@@ -47,7 +47,7 @@ class ProductController extends Controller
         ]);
         $product = new Product($attributes);
         $shopping_list->products()->save($product);
-        return redirect(route("shopping_list.show", compact("shopping_list")));
+        return redirect(route("shopping_list.show", $shopping_list));
     }
 
     /**
@@ -90,9 +90,10 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(ShoppingList $shopping_list, Product $product)
     {
-        //
+        $product->delete();
+        return redirect(route("shopping_list.show", $shopping_list));
     }
 
     /**

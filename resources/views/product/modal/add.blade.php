@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="{{route('product.store', compact('shopping_list'))}}" method="POST" class="needs-validation" novalidate>
+      <form action="{{route('shopping_list.product.store', compact('shopping_list'))}}" method="POST" class="needs-validation" novalidate>
         <div class="modal-body">
           @csrf
           <div class="form-group">
