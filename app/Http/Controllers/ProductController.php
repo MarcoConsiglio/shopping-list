@@ -37,13 +37,13 @@ class ProductController extends Controller
     public function store(Request $request, ShoppingList $shopping_list)
     {
         $attributes = $request->validate([
-            "name"      => "required|min:3|max:50",
-            "brand"     => "max:50",
-            "price"     => "numeric|min:0|max:1000",
-            "quantity"  => "numeric|min:1|max:100",
+            "name"          => "required|min:3|max:50",
+            "brand"         => "max:50",
+            "price"         => "nullable|numeric|min:0|max:1000",
+            "quantity"      => "numeric|min:1|max:1000",
             "cart_quantity" => "nullable|numeric",
-            "measure"   => "nullable|string",
-            "note"      => "nullable|string"
+            "measure"       => "nullable|string",
+            "note"          => "nullable|string"
         ]);
         $product = new Product($attributes);
         $shopping_list->products()->save($product);
@@ -79,9 +79,19 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, ShoppingList $shopping_list, Product $product)
     {
-        //
+        $attributes = $request->validate([
+            "name"          => "required|min:3|max:50",
+            "brand"         => "max:50",
+            "price"         => "nullable|numeric|min:0|max:1000",
+            "quantity"      => "numeric|min:1|max:1000",
+            "cart_quantity" => "nullable|numeric",
+            "measure"       => "nullable|string",
+            "note"          => "nullable|string"
+        ]);
+        $product->setRawAttributes($attributes)->saveOrFail();
+        return redirect(route("shopping_list.show", $shopping_list));
     }
 
     /**

@@ -39,6 +39,7 @@
         </div>
         <div class="my-2 mx-lg-auto w-sm-50 w-lg-40 d-flex justify-content-around justify-content-sm-center justify-content-lg-around">
             @include("product.button.delete")
+            @include("product.button.edit")
         </div>
       </div>
     </div>

@@ -58,4 +58,32 @@ class ProductTest extends TestCase
         $this->assertDatabaseMissing("products", $product->getAttributes());
         $response->assertRedirect(route("shopping_list.show", $shopping_list));
     }
+
+    /**
+     * Un utente può modificare un prodotto di una lista della spesa.
+     * @test
+     */
+    public function a_user_can_edit_a_product()
+    {
+        // $this->withoutExceptionHandling();
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list = factory(ShoppingList::class)->make();
+        $user->shopping_lists()->save($shopping_list);
+        $shopping_list->refresh();
+        $product = factory(Product::class)->make();
+        $shopping_list->products()->save($product);
+        $product->refresh();
+        $edited_product = factory(Product::class)->make();
+        $edited_product->id = $product->id;
+
+        // Act
+        $response = $this->actingAs($user)
+                         ->put(route("shopping_list.product.update", [$shopping_list, $product]),
+                                     $edited_product->getAttributes());
+
+        // Assert
+        $this->assertdatabaseHas("products", $edited_product->getAttributes());
+        $response->assertRedirect(route("shopping_list.show", $shopping_list));
+    }
 }

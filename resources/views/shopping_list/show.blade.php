@@ -66,6 +66,7 @@
 
       @foreach ($shopping_list->products as $product)
         @include("product.modal.delete")
+        @include("product.modal.edit")
       @endforeach
 @endsection
 

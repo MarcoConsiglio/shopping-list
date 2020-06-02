@@ -66,17 +66,17 @@ $factory->define(Product::class, function (Faker $faker) {
     }
     else
     {
-        $quantity = $faker->randomDigit;
+        $quantity = $faker->randomDigitNotNull;
         $cart_quantity = $faker->randomElement([$quantity, 0]);
     }
     do
     {
         $name = $faker->word;
-    } while(strlen($name) < 3);
+    } while(strlen($name) < 3 && strlen($name) > 50);
     return [
         "name" => $name,
         "brand" => $faker->word,
-        "price" => $faker->randomFloat(2, 0, 23),
+        "price" => $faker->randomFloat(2, 0, 1000),
         "quantity" => $quantity,
         "cart_quantity" => $cart_quantity,
         "measure" => $wholesale ? $measure : null,

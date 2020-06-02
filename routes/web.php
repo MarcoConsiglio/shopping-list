@@ -25,6 +25,6 @@ Route::resource("shopping_list", "ShoppingListController")->only([
 
 // Route::post("shopping-list/{shopping_list}/product/store", "ProductController@store")->name("shopping_list.product.store");
 Route::resource("shopping_list.product", "ProductController")->only([
-    "destroy", "store"
+    "destroy", "store", "update"
 ]);
 Route::get('/home', 'HomeController@index')->name('home');

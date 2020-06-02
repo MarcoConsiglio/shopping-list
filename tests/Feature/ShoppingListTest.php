@@ -14,7 +14,7 @@ class ShoppingListTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A User can view ShoppingLists.
+     * Un utente può vedere la collezione delle sue liste della spesa.
      * @test
      */
     public function a_user_can_view_shopping_lists_index()
@@ -34,7 +34,7 @@ class ShoppingListTest extends TestCase
     }
 
     /**
-     * A User can view ShoppingList items.
+     * Un utente può vedere gli elementi di una lista della spesa.
      * @test
      */
     public function a_user_can_view_shopping_list_items()
@@ -54,7 +54,7 @@ class ShoppingListTest extends TestCase
 
 
     /**
-     * A User can edit ShoppingList.
+     * Un utente può modificare una lista della spesa.
      * @test
      */
     public function a_user_can_edit_shopping_list()
