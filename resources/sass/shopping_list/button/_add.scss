@@ -1,0 +1,15 @@
+$plus_button_color: #28a745;
+$size: 36px;
+.plus-button {
+    position: fixed;
+    right: 24px;
+    bottom: 21px;
+    z-index: 1030;
+    background-color: $plus_button_color;
+    width: $size;
+    height: $size;
+    & i {
+        margin-top: 4px;
+        margin-left: 5px;
+    }
+}

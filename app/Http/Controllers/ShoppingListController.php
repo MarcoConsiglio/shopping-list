@@ -14,18 +14,19 @@ class ShoppingListController extends Controller
      */
     public function index()
     {
-        //
+        $shopping_lists = auth()->user()->shopping_lists;
+        return view("shopping_list.index", compact("shopping_lists"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    // /**
+    //  * Show the form for creating a new resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function create()
+    // {
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -35,30 +36,33 @@ class ShoppingListController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        auth()->user()->shopping_lists()->save(
+            new ShoppingList($request->all())
+        );
+        return redirect(route("shopping_list.index"));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\ShoppingList  $shoppingList
+     * @param  \App\ShoppingList  $shopping_list
      * @return \Illuminate\Http\Response
      */
-    public function show(ShoppingList $shoppingList)
+    public function show(ShoppingList $shopping_list)
     {
-        //
+        return view("shopping_list.show", compact("shopping_list"));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ShoppingList  $shoppingList
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ShoppingList $shoppingList)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  *
+    //  * @param  \App\ShoppingList  $shoppingList
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function edit(ShoppingList $shoppingList)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -67,9 +71,10 @@ class ShoppingListController extends Controller
      * @param  \App\ShoppingList  $shoppingList
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ShoppingList $shoppingList)
+    public function update(Request $request, ShoppingList $shopping_list)
     {
-        //
+        $shopping_list->update($request->all());
+        return redirect(route("shopping_list.index"));
     }
 
     /**
@@ -80,6 +85,15 @@ class ShoppingListController extends Controller
      */
     public function destroy(ShoppingList $shoppingList)
     {
-        //
+        $shoppingList->delete();
+        return redirect(route("shopping_list.index"));
+    }
+
+    /**
+     * All methods of this controller requires authentication.
+     */
+    public function __construct()
+    {
+        $this->middleware("auth");
     }
 }

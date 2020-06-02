@@ -1,0 +1,6 @@
+$asterisk_color: rgb(218, 83, 83);
+form {
+    & .required {
+        color: $asterisk_color;
+    }
+}

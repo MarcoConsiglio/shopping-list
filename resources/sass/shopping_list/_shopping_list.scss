@@ -1,0 +1,63 @@
+@import '../media/query';
+@import '../media/columns';
+@import '../media/size';
+
+.name, .brand, .price
+{
+  @media screen and (max-width: $sm)
+  {
+    min-width: $col-1-3 !important;
+  }
+
+  @media screen and (min-width: $lg)
+  {
+    min-width: $col-1-3;
+  }
+}
+
+.quantity, .cart-quantity
+{
+  @media screen and (max-width: $sm)
+  {
+    min-width: $col-1-2 !important;
+  }
+
+  @media screen and (min-width: $lg)
+  {
+    min-width: $col-1-4;
+  }
+}
+
+.note
+{
+  @media screen and (min-width: $lg)
+  {
+    width: $col-1-2;
+  }
+}
+
+.list-header-container
+{
+  margin-top: 55px;
+  z-index: 1020;
+
+  @media screen and (min-width: $xl)
+  {
+    width: $col-1-1;
+
+    > div
+    {
+      width: $col-1-1 !important;
+    }
+  }
+}
+
+.list-extra-space
+{
+  height: 112px + 56px;
+
+  @media screen and (min-width: $md)
+  {
+    height: 80px + 56px;
+  }
+}
