@@ -80,7 +80,7 @@ class ProductTest extends TestCase
         // Act
         $response = $this->actingAs($user)
                          ->put(route("shopping_list.product.update", [$shopping_list, $product]),
-                                     $edited_product->getAttributes());
+                               $edited_product->getAttributes());
 
         // Assert
         $this->assertdatabaseHas("products", $edited_product->getAttributes());

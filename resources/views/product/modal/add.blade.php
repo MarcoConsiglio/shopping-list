@@ -40,9 +40,9 @@
             <div class="col-3">
               <div class="form-group">
                 <label for="quantity">Quantità</label>
-                <input type="number" min="1" max="100" step="0.5" name="quantity" id="quantity" value="1" class="form-control">
+                <input type="number" min="1" max="1000" step="0.5" name="quantity" id="quantity" value="1" class="form-control">
                 <div class="invalid-feedback">
-                  Minimo 0, massimo 100.
+                  Minimo 0, massimo 1000.
                 </div>
               </div>
             </div><!-- .col-3 -->

@@ -41,7 +41,7 @@ class ProductController extends Controller
             "brand"         => "max:50",
             "price"         => "nullable|numeric|min:0|max:1000",
             "quantity"      => "numeric|min:1|max:1000",
-            "cart_quantity" => "nullable|numeric",
+            "cart_quantity" => "nullable|numeric|min:0",
             "measure"       => "nullable|string",
             "note"          => "nullable|string"
         ]);
@@ -86,7 +86,7 @@ class ProductController extends Controller
             "brand"         => "max:50",
             "price"         => "nullable|numeric|min:0|max:1000",
             "quantity"      => "numeric|min:1|max:1000",
-            "cart_quantity" => "nullable|numeric",
+            "cart_quantity" => "nullable|numeric|min:0",
             "measure"       => "nullable|string",
             "note"          => "nullable|string"
         ]);

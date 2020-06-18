@@ -69,10 +69,16 @@ $factory->define(Product::class, function (Faker $faker) {
         $quantity = $faker->randomDigitNotNull;
         $cart_quantity = $faker->randomElement([$quantity, 0]);
     }
-    do
-    {
+    // Genera un nome che si all'interno di 3 e 50 caratteri.
+    do{
         $name = $faker->word;
-    } while(strlen($name) < 3 && strlen($name) > 50);
+        if($name == "et") $name = "amammt!";
+    } while (strlen($name) < 3 && strlen($name) > 50);
+    // Genera un brand che non abbia più di 50 caratteri.
+    do {
+        $brand = $faker->word;
+        if($brand == "et") $brand = "amammt!";
+    } while (strlen($brand) > 50);
     return [
         "name" => $name,
         "brand" => $faker->word,
