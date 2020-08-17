@@ -15,17 +15,17 @@
         </div>
         <div class="d-flex w-md-40 w-lg-60 justify-content-around py-1">
           <div class="quantity">
-            @if($product->measure)
+            @if($product->measure != "null")
               {{$product->measure}} {{$product->quantity}}
             @else
-              {{(int)$product->quantity}}
+              {{intval($product->quantity)}}
             @endif
           </div>
           <div class="cart-quantity">
-            @if($product->measure)
+            @if($product->measure != "null")
               {{$product->measure}} {{$product->cart_quantity}}
             @else
-              {{(int)$product->cart_quantity}}
+              {{intval($product->cart_quantity)}}
             @endif
           </div>
           <div class="note d-none d-lg-block">
