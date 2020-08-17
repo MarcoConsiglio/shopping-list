@@ -1,3 +1,6 @@
+@php
+    $products = $shopping_list->products
+@endphp
 @extends("layouts.standard")
 @section("content")
       <!-- Table header -->
@@ -50,8 +53,8 @@
           </div>
       @endif
 
-      @if($shopping_list->products->count())
-        @foreach ($shopping_list->products as $product)
+      @if($products->count())
+        @foreach ($products->sortByDesc("updated_at")->values()->all() as $product)
           @include("product.show")
         @endforeach
 
@@ -64,7 +67,7 @@
       @include("product.button.add")
       @include("product.modal.add")
 
-      @foreach ($shopping_list->products as $product)
+      @foreach ($products as $product)
         @include("product.modal.delete")
         @include("product.modal.edit")
       @endforeach

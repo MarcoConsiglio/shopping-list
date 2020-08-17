@@ -30,6 +30,7 @@ class CreateProductsTable extends Migration
                   ->constrained("shopping_lists")
                   ->onDelete("cascade")
                   ->onUpdate("cascade");
+            $table->timestamps();
         });
     }
 
