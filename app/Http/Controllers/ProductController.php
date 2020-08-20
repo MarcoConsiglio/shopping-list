@@ -95,6 +95,23 @@ class ProductController extends Controller
     }
 
     /**
+     * Aggiunge una certa quantità di un prodotto al carrello.
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @param \App\ShoppingList $shopping_list
+     * @param \App\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function addToCart(Request $request, ShoppingList $shopping_list, Product $product) {
+        $attributes = $request->validate([
+            "cart_quantity" => "numeric|min:0"
+        ]);
+        $product->cart_quantity = $attributes["cart_quantity"];
+        $product->saveOrFail();
+        return redirect(route("shopping_list.show", compact("shopping_list")));
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Product  $product
