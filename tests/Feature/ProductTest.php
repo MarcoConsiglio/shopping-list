@@ -102,7 +102,6 @@ class ProductTest extends TestCase
         $added_quantity = $product->quantity;
 
         // Act
-
         $response = $this->actingAs($user)
                          ->post(route("shopping_list.product.add_to_cart",
                                       compact(["product", "shopping_list"])),
@@ -118,5 +117,29 @@ class ProductTest extends TestCase
         );
         $this->assertDatabaseHas("products", $attributes);
         $response->assertRedirect(route("shopping_list.show", $shopping_list));
+    }
+
+    /**
+     * Un utente non può aggiungere una quantità negativa al carrello.
+     * @test
+     */
+    public function a_user_cant_add_negative_quantity_to_the_cart() {
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list = factory(ShoppingList::class)->make();
+        $user->shopping_lists()->save($shopping_list);
+        $shopping_list->refresh();
+        $product = factory(Product::class)->make();
+        $shopping_list->products()->save($product);
+
+        // Act
+        $response = $this->actingAs($user)
+        ->post(route("shopping_list.product.add_to_cart",
+                     compact(["product", "shopping_list"])),
+        ["cart_quantity" => -5]);
+        $product->refresh();
+
+        // Assert
+        $response->assertSessionHasErrors(["cart_quantity"]);
     }
 }
