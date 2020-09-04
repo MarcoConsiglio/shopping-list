@@ -10,22 +10,22 @@
             {{$product->brand}}
           </div>
           <div class="price">
-            € {{number_format($product->price, 2)}}
+            € {{number_format($product->price, 2, ",", ".")}}
           </div>
         </div>
         <div class="d-flex w-md-40 w-lg-60 justify-content-around py-1">
           <div class="quantity">
-            @if($product->measure != "null")
-              {{$product->measure}} {{$product->quantity}}
+            @if($product->measure != "null" && $product->measure != null)
+              {{$product->measure}} {{number_format($product->quantity, 1, ",", ".")}}
             @else
-              {{intval($product->quantity)}}
+              x{{intval($product->quantity)}}
             @endif
           </div>
           <div class="cart-quantity">
-            @if($product->measure != "null")
-              {{$product->measure}} {{$product->cart_quantity}}
+            @if($product->measure != "null" && $product->measure != null)
+              {{$product->measure}} {{number_format($product->cart_quantity, 1, ",", ".")}}
             @else
-              {{intval($product->cart_quantity)}}
+              x{{intval($product->cart_quantity)}}
             @endif
           </div>
           <div class="note d-none d-lg-block">
