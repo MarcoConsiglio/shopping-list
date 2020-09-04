@@ -9,7 +9,11 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annulla</button>
-        <button dusk="delete_product_button_modal_{{$product->id}}" type="button" class="btn btn-danger text-white">Elimina</button>
+        <form method="POST" action="{{route("shopping_list.product.destroy", compact("shopping_list", "product"))}}">
+            @csrf
+            @method("DELETE")
+            <button dusk="delete_product_button_modal_{{$product->id}}" type="submit" class="btn btn-danger text-white">Elimina</button>
+        </form>
       </div>
     </div>
   </div>
