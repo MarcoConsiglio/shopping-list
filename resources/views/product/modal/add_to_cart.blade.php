@@ -11,10 +11,10 @@
                 @csrf
                 <div class="modal-body">
                     <label class="sr-only" for="cart_quantity_{{$product->id}}">Quantità nel carrello</label>
-                    @if($product->measure != "null")
+                    @if($product->measure)
                         <div class="input-group mb-2 mr-sm-2">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">{{$product->measure}}</div>
+                                <div class="input-group-text">{{$product->measure === "hg" ? "etti" : $product->measure}}</div>
                             </div>
                             <input type="number" class="form-control" name="cart_quantity" id="cart_quantity_{{$product->id}}" value="{{$product->quantity}}">
                         </div>

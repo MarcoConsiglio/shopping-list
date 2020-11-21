@@ -15,15 +15,15 @@
         </div>
         <div class="d-flex w-md-40 w-lg-60 justify-content-around py-1">
           <div class="quantity">
-            @if($product->measure != "null" && $product->measure != null)
-              {{$product->measure}} {{number_format($product->quantity, 1, ",", ".")}}
+            @if($product->measure)
+            {{number_format($product->quantity, 0, ",", ".")}} {{$product->measure == "hg" ? "etti" : $product->measure}}
             @else
               x{{intval($product->quantity)}}
             @endif
           </div>
           <div class="cart-quantity" dusk="cartQuantity_{{$product->id}}">
-            @if($product->measure != "null" && $product->measure != null)
-              {{$product->measure}} {{number_format($product->cart_quantity, 1, ",", ".")}}
+            @if($product->measure)
+            {{number_format($product->quantity, 0, ",", ".")}} {{$product->measure == "hg" ? "etti" : $product->measure}}
             @else
               x{{intval($product->cart_quantity)}}
             @endif
