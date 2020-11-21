@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ShoppingListController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a collection of ShoppingLists.
      *
      * @return \Illuminate\Http\Response
      */
@@ -17,16 +17,6 @@ class ShoppingListController extends Controller
         $shopping_lists = auth()->user()->shopping_lists;
         return view("shopping_list.index", compact("shopping_lists"));
     }
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function create()
-    // {
-    //     //
-    // }
 
     /**
      * Store a newly created resource in storage.
@@ -53,17 +43,6 @@ class ShoppingListController extends Controller
         return view("shopping_list.show", compact("shopping_list"));
     }
 
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  \App\ShoppingList  $shoppingList
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function edit(ShoppingList $shoppingList)
-    // {
-    //     //
-    // }
-
     /**
      * Update the specified resource in storage.
      *
@@ -83,9 +62,9 @@ class ShoppingListController extends Controller
      * @param  \App\ShoppingList  $shoppingList
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ShoppingList $shoppingList)
+    public function destroy(ShoppingList $shopping_list)
     {
-        $shoppingList->delete();
+        $shopping_list->delete();
         return redirect(route("shopping_list.index"));
     }
 

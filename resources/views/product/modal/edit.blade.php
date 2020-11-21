@@ -52,12 +52,12 @@
                 <label for="measure">Misura</label>
                 {{$measure = null !== old('measure') ? old('measure') : $product->measure}}
                 <select id="measure" name="measure" class="form-control">
-                  <option value="null"  @if($measure == null) selected @endif>Nessuna</option>
-                  <option value="kg"    @if($measure == "kg") selected @endif>kili</option>
-                  <option value="l"     @if($measure == "l") selected @endif>litri</option>
-                  <option value="hg"    @if($measure == "hg") selected @endif>etti</option>
-                  <option value="g"     @if($measure == "g") selected @endif>grammi</option>
-                  <option value="ml"    @if($measure == "ml") selected @endif>millilitri</option>
+                  <option value="null"  @if($measure == null)   selected @endif>Nessuna</option>
+                  <option value="kg"    @if($measure == "kg")   selected @endif>kili</option>
+                  <option value="l"     @if($measure == "l")    selected @endif>litri</option>
+                  <option value="hg"    @if($measure == "hg")   selected @endif>etti</option>
+                  <option value="g"     @if($measure == "g")    selected @endif>grammi</option>
+                  <option value="ml"    @if($measure == "ml")   selected @endif>millilitri</option>
                 </select>
               </div>
             </div><!-- .col-1 -->

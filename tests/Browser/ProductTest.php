@@ -41,12 +41,47 @@ class ProductTest extends DuskTestCase
                         })
                     ->assertSee($product->name)
                     ->assertSee($product->brand)
-                    ->assertSee($product->price)
+                    ->assertSee(number_format($product->price, 2, ",", "."))
                     ->assertSee($product->quantity);
             if($product->measure)
                 $browser->assertSee($product->measure);
             $browser->assertSee($product->note)
                     ->assertRouteIs("shopping_list.show", compact("shopping_list"));
+        });
+    }
+
+    /**
+     * Un utente può aggiungere un prodotto al carrello.
+     * @test
+     */
+    public function a_user_can_add_a_product_to_the_cart() {
+        // Arrange
+        $user = factory(User::class)->create();
+        $shopping_list = $user->shopping_lists()->save(
+            factory(ShoppingList::class)->make()
+        );
+        $product = $shopping_list->products()->save(
+            factory(Product::class)->make([
+                "cart_quantity" => 0
+            ])
+        );
+
+        // Act & Assert
+        $this->browse(function (Browser $browser) use ($user, $shopping_list, $product) {
+            $browser->loginAs($user)
+                    ->visit(route("shopping_list.show", $shopping_list))
+                    ->click("@add_to_cart_{$product->id}")
+                    ->whenAvailable(".modal#addToCart_{$product->id}",
+                        function ($modal) use ($product) {
+                            $modal->assertSee("Quanti ne vuoi mettere nel carrello?")
+                                  ->click("@confirm_add_to_cart_{$product->id}");
+                        }
+                    )
+                    ->assertRouteIs("shopping_list.show", ["shopping_list" => $shopping_list->id]);
+            if(!$product->measure)
+                $browser->assertSeeIn("@cartQuantity_{$product->id}", "x".$product->quantity);
+            else
+                $browser->assertSeeIn("@cartQuantity_{$product->id}", $product->measure." ".$product->quantity);
         });
     }
 
@@ -113,8 +148,9 @@ class ProductTest extends DuskTestCase
                         })
                     ->assertSee($edited_product->name)
                     ->assertSee($edited_product->brand)
-                    ->assertSee($edited_product->price)
-                    ->assertSee($edited_product->quantity);
+                    ->assertSee(number_format($edited_product->price, 2, ",", ".")  )
+                    ->assertSee($edited_product->quantity)
+                    ->assertSee($edited_product->cart_quantity);
             if($edited_product->measure)
                 $browser->assertSee($edited_product->measure);
             $browser->assertSee($edited_product->note)

@@ -21,7 +21,7 @@
               x{{intval($product->quantity)}}
             @endif
           </div>
-          <div class="cart-quantity">
+          <div class="cart-quantity" dusk="cartQuantity_{{$product->id}}">
             @if($product->measure != "null" && $product->measure != null)
               {{$product->measure}} {{number_format($product->cart_quantity, 1, ",", ".")}}
             @else
@@ -40,6 +40,7 @@
         <div class="my-2 mx-lg-auto w-sm-50 w-lg-40 d-flex justify-content-around justify-content-sm-center justify-content-lg-around">
             @include("product.button.delete")
             @include("product.button.edit")
+            @include("product.button.add_to_cart")
         </div>
       </div>
     </div>

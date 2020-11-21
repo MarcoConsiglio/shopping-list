@@ -9,27 +9,7 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Store a Product in a ShoppingList.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -38,7 +18,7 @@ class ProductController extends Controller
     {
         $attributes = $request->validate([
             "name"          => "required|min:3|max:50",
-            "brand"         => "max:50",
+            "brand"         => "nullable|max:50",
             "price"         => "nullable|numeric|min:0|max:1000",
             "quantity"      => "numeric|min:1|max:1000",
             "cart_quantity" => "nullable|numeric|min:0",
@@ -51,29 +31,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Update a Product in a ShoppingList.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Product  $product
@@ -95,7 +53,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Aggiunge una certa quantità di un prodotto al carrello.
+     * Add a quantity of a Product of a ShoppingList into the cart.
      *
      * @param \Illuminate\Http\Request  $request
      * @param \App\ShoppingList $shopping_list
@@ -112,7 +70,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a Product from a ShoppingList.
      *
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response

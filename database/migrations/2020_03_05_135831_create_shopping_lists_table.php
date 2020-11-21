@@ -8,6 +8,11 @@ class CreateShoppingListsTable extends Migration
 {
     use SQLiteMigration;
 
+    /**
+     * Nome della tabella.
+     *
+     * @var string
+     */
     private $table_name = "shopping_lists";
 
     /**
@@ -17,7 +22,7 @@ class CreateShoppingListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shopping_lists', function (Blueprint $table) {
+        Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
             $table->string("title")->required();
             $table->foreignId('user_id')

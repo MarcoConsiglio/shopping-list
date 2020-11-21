@@ -64,12 +64,14 @@
           La lista è vuota.
         </div>
       @endif
+      <!-- Modals -->
       @include("product.button.add")
       @include("product.modal.add")
 
       @foreach ($products as $product)
         @include("product.modal.delete")
         @include("product.modal.edit")
+        @include("product.modal.add_to_cart")
       @endforeach
 @endsection
 
