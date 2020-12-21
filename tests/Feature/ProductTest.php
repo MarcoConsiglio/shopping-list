@@ -5,11 +5,11 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\{User, ShoppingList, Product};
+use App\Models\{User, ShoppingList, Product};
 
 class ProductTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
     /**
      * Un utente può aggiungere un prodotto ad una lista della spesa.
      * @test
@@ -18,10 +18,11 @@ class ProductTest extends TestCase
     {
         // $this->withoutExceptionHandling();
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = factory(ShoppingList::class)->make();
-        $user->shopping_lists()->save($shopping_list);
-        $product = factory(Product::class)->make();
+        $user = User::factory()
+                    ->has(ShoppingList::factory())
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::factory()->make();
         $attributes = $product->getAttributes();
 
         // Act
@@ -43,12 +44,12 @@ class ProductTest extends TestCase
     public function a_user_can_delete_a_product()
     {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = factory(ShoppingList::class)->make();
-        $user->shopping_lists()->save($shopping_list);
-        $product = factory(Product::class)->make();
-        $shopping_list->refresh();
-        $shopping_list->products()->save($product);
+        $user = User::factory()
+        ->has(ShoppingList::factory()
+            ->has(Product::factory()))
+        ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::firstOrFail();
 
         // Act
         $response = $this->actingAs($user)
@@ -67,22 +68,21 @@ class ProductTest extends TestCase
     {
         // $this->withoutExceptionHandling();
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = factory(ShoppingList::class)->make();
-        $user->shopping_lists()->save($shopping_list);
-        $shopping_list->refresh();
-        $product = factory(Product::class)->make();
-        $shopping_list->products()->save($product);
-        $product->refresh();
-        $edited_product = factory(Product::class)->make();
-        $edited_product->id = $product->id;
+        $user = User::factory()
+                    ->has(ShoppingList::factory()
+                        ->has(Product::factory()))
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::firstOrFail();
+        $edited_product = Product::factory()->make();
 
         // Act
         $response = $this->actingAs($user)
                          ->put(route("shopping_list.product.update", [$shopping_list, $product]),
-                               $edited_product->getAttributes());
+                                     $edited_product->getAttributes());
 
         // Assert
+        $edited_product->id = $product->id;
         $this->assertdatabaseHas("products", $edited_product->getAttributes());
         $response->assertRedirect(route("shopping_list.show", $shopping_list));
     }
@@ -93,12 +93,13 @@ class ProductTest extends TestCase
      */
     public function a_user_can_add_a_product_to_the_cart() {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = factory(ShoppingList::class)->make();
-        $user->shopping_lists()->save($shopping_list);
-        $shopping_list->refresh();
-        $product = factory(Product::class)->make();
-        $shopping_list->products()->save($product);
+        $user = User::factory()
+                    ->has(ShoppingList::factory()
+                        ->has(Product::factory()))
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::firstOrFail();
+        $attributes = $product->getAttributes();
         $added_quantity = $product->quantity;
 
         // Act
@@ -125,18 +126,18 @@ class ProductTest extends TestCase
      */
     public function a_user_cant_add_negative_quantity_to_the_cart() {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = factory(ShoppingList::class)->make();
-        $user->shopping_lists()->save($shopping_list);
-        $shopping_list->refresh();
-        $product = factory(Product::class)->make();
-        $shopping_list->products()->save($product);
+        $user = User::factory()
+                    ->has(ShoppingList::factory()
+                        ->has(Product::factory()))
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::firstOrFail();
 
         // Act
         $response = $this->actingAs($user)
-        ->post(route("shopping_list.product.add_to_cart",
-                     compact(["product", "shopping_list"])),
-        ["cart_quantity" => -5]);
+                         ->post(route("shopping_list.product.add_to_cart",
+                                compact(["product", "shopping_list"])),
+                    ["cart_quantity" => 0 - $this->faker->randomDigitNotNull()]);
         $product->refresh();
 
         // Assert

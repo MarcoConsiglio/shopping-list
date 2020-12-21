@@ -1,12 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\{Product, User};
+use App\Models\{Product, User};
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ShoppingList extends Model
 {
+    use HasFactory;
+
     /**
      * Attributes protected from mass assignment.
      *

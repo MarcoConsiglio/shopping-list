@@ -5,8 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\User;
-use App\ShoppingList;
+use App\Models\User;
+use App\Models\ShoppingList;
 
 class ShoppingListTest extends TestCase
 {
@@ -21,8 +21,10 @@ class ShoppingListTest extends TestCase
     {
         // $this->withoutExceptionHandling();
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
+        $user = User::factory()
+                    ->has(ShoppingList::factory())
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
         $this->be($user);
 
         // Act
@@ -39,14 +41,17 @@ class ShoppingListTest extends TestCase
      */
     public function a_user_can_view_shopping_list_items()
     {
-        // $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
+        $user = User::factory()
+                    ->has(ShoppingList::factory())
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
         $this->be($user);
 
         // Act
         $response = $this->get(route("shopping_list.show", $shopping_list));
+        // dd($response->content());
 
         // Assert
         $response->assertViewIs("shopping_list.show");
@@ -61,19 +66,18 @@ class ShoppingListTest extends TestCase
     {
         // $this->withoutExceptionHandling();
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list =
-            $user->shopping_lists()
-                 ->save(factory(ShoppingList::class)->make());
+        $user = User::factory()
+                    ->has(ShoppingList::factory())
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
         $this->be($user);
-        $edited_shopping_list = $shopping_list;
-        $edited_shopping_list->title = $this->faker->sentence(4);
+        $edited_shopping_list = ShoppingList::factory()->make();
         $attributes = $edited_shopping_list->getAttributes();
         unset($attributes["updated_at"]);
 
         // Act
         $response = $this->put(
-            route("shopping_list.update", $edited_shopping_list),
+            route("shopping_list.update", $shopping_list),
             $attributes
         );
 
@@ -89,10 +93,10 @@ class ShoppingListTest extends TestCase
     public function a_user_can_delete_a_shopping_list()
     {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list =
-            $user->shopping_lists()
-                 ->save(factory(ShoppingList::class)->make());
+        $user = User::factory()
+                    ->has(ShoppingList::factory())
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
         $attributes = $shopping_list->getAttributes();
         $this->be($user);
 
@@ -113,8 +117,8 @@ class ShoppingListTest extends TestCase
     public function a_user_can_create_a_shopping_list()
     {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = factory(ShoppingList::class)->make();
+        $user = User::factory()->create();
+        $shopping_list = ShoppingList::factory()->make();
         $attributes = $shopping_list->getAttributes();
         $this->be($user);
 

@@ -23,7 +23,7 @@
           </div>
           <div class="cart-quantity" dusk="cartQuantity_{{$product->id}}">
             @if($product->measure)
-            {{number_format($product->quantity, 0, ",", ".")}} {{$product->measure == "hg" ? "etti" : $product->measure}}
+            {{number_format($product->cart_quantity, 0, ",", ".")}} {{$product->measure == "hg" ? "etti" : $product->measure}}
             @else
               x{{intval($product->cart_quantity)}}
             @endif

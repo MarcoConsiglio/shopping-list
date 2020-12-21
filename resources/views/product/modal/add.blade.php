@@ -50,7 +50,7 @@
               <div class="form-group">
                 <label for="measure">Misura</label>
                 <select id="measure" name="measure" class="form-control">
-                  <option value="null" selected>Nessuna</option>
+                  <option value="" selected>Nessuna</option>
                   <option value="kg">kili</option>
                   <option value="l">litri</option>
                   <option value="hg">etti</option>

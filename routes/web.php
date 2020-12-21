@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShoppingListController;
+use App\Http\Controllers\HomeController;
 use App\ShoppingList;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+
+require __DIR__.'/auth.php';
 
 Route::get('/', function () {
     return view('welcome');
