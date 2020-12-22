@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ShoppingList;
+use App\Models\ShoppingList;
 use Illuminate\Http\Request;
 
 class ShoppingListController extends Controller
@@ -14,7 +14,7 @@ class ShoppingListController extends Controller
      */
     public function index()
     {
-        $shopping_lists = auth()->user()->shopping_lists;
+        $shopping_lists = auth()->user()->shoppingLists;
         return view("shopping_list.index", compact("shopping_lists"));
     }
 
@@ -26,7 +26,7 @@ class ShoppingListController extends Controller
      */
     public function store(Request $request)
     {
-        auth()->user()->shopping_lists()->save(
+        auth()->user()->shoppingLists()->save(
             new ShoppingList($request->all())
         );
         return redirect(route("shopping_list.index"));
@@ -35,7 +35,7 @@ class ShoppingListController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ShoppingList  $shopping_list
+     * @param  \App\Models\ShoppingList  $shopping_list
      * @return \Illuminate\Http\Response
      */
     public function show(ShoppingList $shopping_list)
@@ -47,7 +47,7 @@ class ShoppingListController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ShoppingList  $shoppingList
+     * @param  \App\Models\ShoppingList  $shoppingList
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ShoppingList $shopping_list)
@@ -59,7 +59,7 @@ class ShoppingListController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ShoppingList  $shoppingList
+     * @param  \App\Models\ShoppingList  $shoppingList
      * @return \Illuminate\Http\Response
      */
     public function destroy(ShoppingList $shopping_list)

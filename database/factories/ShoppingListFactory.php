@@ -1,12 +1,29 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use App\ShoppingList;
-use Faker\Generator as Faker;
+use App\Models\Model;
+use App\Models\ShoppingList;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(ShoppingList::class, function (Faker $faker) {
-    return [
-        "title" => $faker->sentence(3)
-    ];
-});
+class ShoppingListFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ShoppingList::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            "title" => $this->faker->sentence(3)
+        ];
+    }
+}

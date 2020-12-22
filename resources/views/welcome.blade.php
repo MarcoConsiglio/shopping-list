@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="/css/app.css" rel="stylesheet">
 
-        <title>Laravel</title>
+        <title>Shopping List</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        {{-- <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet"> --}}
 
         <!-- Styles -->
         <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
 
             .full-height {
                 height: 100vh;
@@ -80,10 +73,8 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Shopping List
-                </div>
-                <cite class="text-center">Marco Consiglio</cite>
+                <img class="img-fluid" src="{{asset('images/logo.png')}}">
+                <cite class="text-center">by Marco Consiglio</cite>
             </div>
         </div>
     </body>

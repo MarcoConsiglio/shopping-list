@@ -1,15 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\ShoppingList;
+use App\Models\ShoppingList;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Represents a Product in a ShoppingList.
  */
 class Product extends Model
 {
+    use HasFactory;
+
     /**
      * Attributes protected from mass assignment.
      *
@@ -22,7 +25,7 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function shopping_list()
+    public function shoppingLists()
     {
         return $this->belongsTo(ShoppingList::class);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
-use App\ShoppingList;
+use App\Models\Product;
+use App\Models\ShoppingList;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -34,7 +34,7 @@ class ProductController extends Controller
      * Update a Product in a ShoppingList.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ShoppingList $shopping_list, Product $product)
@@ -44,10 +44,10 @@ class ProductController extends Controller
             "brand"         => "max:50",
             "price"         => "nullable|numeric|min:0|max:1000",
             "quantity"      => "numeric|min:1|max:1000",
-            "cart_quantity" => "nullable|numeric|min:0",
             "measure"       => "nullable|string",
             "note"          => "nullable|string"
         ]);
+        $attributes["cart_quantity"] = $product->cart_quantity;
         $product->setRawAttributes($attributes)->saveOrFail();
         return redirect(route("shopping_list.show", $shopping_list));
     }
@@ -56,8 +56,8 @@ class ProductController extends Controller
      * Add a quantity of a Product of a ShoppingList into the cart.
      *
      * @param \Illuminate\Http\Request  $request
-     * @param \App\ShoppingList $shopping_list
-     * @param \App\Product  $product
+     * @param \App\Models\ShoppingList $shopping_list
+     * @param \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function addToCart(Request $request, ShoppingList $shopping_list, Product $product) {
@@ -72,7 +72,7 @@ class ProductController extends Controller
     /**
      * Remove a Product from a ShoppingList.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function destroy(ShoppingList $shopping_list, Product $product)
