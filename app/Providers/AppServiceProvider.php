@@ -13,10 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Aggiorna i driver Chrome per Dusk solo per ambienti di test e sviluppo.
-        if ($this->app->environment('local', 'testing')) {
-            $this->app->register(\Staudenmeir\DuskUpdater\DuskServiceProvider::class);
-        }
+        //
     }
 
     /**

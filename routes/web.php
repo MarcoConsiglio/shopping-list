@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShoppingListController;
+use App\Http\Controllers\HomeController;
+use App\ShoppingList;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,20 +17,20 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+
+require __DIR__.'/auth.php';
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource("shopping_list", "ShoppingListController")->only([
-    "index", "show", "update", "destroy", "store"
+Route::resource("shopping_list", ShoppingListController::class)->except([
+    "create", "edit"
 ]);
 
-// Route::post("shopping-list/{shopping_list}/product/store", "ProductController@store")->name("shopping_list.product.store");
-Route::resource("shopping_list.product", "ProductController")->only([
+Route::resource("shopping_list.product", ProductController::class)->only([
     "destroy", "store", "update"
 ]);
-Route::post("/shopping_list/{shopping_list}/product/{product}/add-to-cart", "ProductController@addToCart")->name("shopping_list.product.add_to_cart");
+Route::post("/shopping_list/{shopping_list}/product/{product}/add-to-cart", [ProductController::class, "addToCart"])->name("shopping_list.product.add_to_cart");
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', [HomeController::class, "index"])->name('home');

@@ -3,10 +3,11 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Database\SQLiteMigrations;
 
 class CreateShoppingListsTable extends Migration
 {
-    use SQLiteMigration;
+    use SQLiteMigrations;
 
     /**
      * Nome della tabella.
@@ -40,12 +41,11 @@ class CreateShoppingListsTable extends Migration
      */
     public function down()
     {
-        if($this->isSQLite())
-        {
-            Schema::table($this->table_name, function(Blueprint $table){
+
+        Schema::table($this->table_name, function(Blueprint $table){
+            if(!$this->isSQLiteDatabase())
                 $table->dropforeign(["user_id"]);
-            });
-        }
+        });
         Schema::dropIfExists('shopping_lists');
 
     }

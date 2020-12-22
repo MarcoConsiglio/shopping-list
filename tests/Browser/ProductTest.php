@@ -2,7 +2,7 @@
 
 namespace Tests\Browser;
 
-use App\{ShoppingList, User, Product};
+use App\Models\{ShoppingList, User, Product};
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -17,11 +17,11 @@ class ProductTest extends DuskTestCase
     public function a_user_can_add_a_product()
     {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = $user->shopping_lists()->save(
-            factory(ShoppingList::class)->make()
-        );
-        $product = factory(Product::class)->make();
+        $user = User::factory()
+                    ->has(ShoppingList::factory())
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::factory()->make();
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product){
@@ -56,15 +56,12 @@ class ProductTest extends DuskTestCase
      */
     public function a_user_can_add_a_product_to_the_cart() {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = $user->shopping_lists()->save(
-            factory(ShoppingList::class)->make()
-        );
-        $product = $shopping_list->products()->save(
-            factory(Product::class)->make([
-                "cart_quantity" => 0
-            ])
-        );
+        $user = User::factory()
+                    ->has(ShoppingList::factory()
+                        ->has(Product::factory()))
+                    ->create();
+            $shopping_list = ShoppingList::firstOrFail();
+            $product = Product::firstOrFail();
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product) {
@@ -79,9 +76,9 @@ class ProductTest extends DuskTestCase
                     )
                     ->assertRouteIs("shopping_list.show", ["shopping_list" => $shopping_list->id]);
             if(!$product->measure)
-                $browser->assertSeeIn("@cartQuantity_{$product->id}", "x".$product->quantity);
+                $browser->assertSeeIn("@cartQuantity_{$product->id}", "x".number_format($product->quantity, 0, ",", "."));
             else
-                $browser->assertSeeIn("@cartQuantity_{$product->id}", $product->measure." ".$product->quantity);
+                $browser->assertSeeIn("@cartQuantity_{$product->id}", number_format($product->quantity, 0, ",", ".")." ".$product->measure);
         });
     }
 
@@ -92,11 +89,12 @@ class ProductTest extends DuskTestCase
     public function a_user_can_delete_a_product()
     {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = $user->shopping_lists()
-                              ->save(factory(ShoppingList::class)->make());
-        $product = $shopping_list->products()
-                                 ->save(factory(Product::class)->make());
+        $user = User::factory()
+                    ->has(ShoppingList::factory()
+                        ->has(Product::factory()))
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::firstOrFail();
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product) {
@@ -120,10 +118,13 @@ class ProductTest extends DuskTestCase
     public function a_user_can_update_a_product()
     {
         // Arrange
-        $user = factory(User::class)->create();
-        $shopping_list = $user->shopping_lists()->save(factory(ShoppingList::class)->make());
-        $product = $shopping_list->products()->save(factory(Product::class)->make());
-        $edited_product = factory(Product::class)->make();
+        $user = User::factory()
+                    ->has(ShoppingList::factory()
+                        ->has(Product::factory()))
+                    ->create();
+        $shopping_list = ShoppingList::firstOrFail();
+        $product = Product::firstOrFail();
+        $edited_product = Product::factory()->make();
         $edited_product->id = $product->id;
 
         // Act & Assert
