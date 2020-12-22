@@ -16,5 +16,5 @@ mix.js('resources/js/app.js', 'public/js')
         require('tailwindcss'),
     ])
     .sass('resources/sass/style.scss', 'public/css')
-    .copy('resource/images/*', 'public/images')
+    .copy('resources/images/*', 'public/images')
     .sourceMaps();

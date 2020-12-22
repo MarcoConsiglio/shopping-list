@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Auth;
 
 require __DIR__.'/auth.php';
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, "index"])->name('home');
 
 Route::resource("shopping_list", ShoppingListController::class)->except([
     "create", "edit"
@@ -33,4 +31,3 @@ Route::resource("shopping_list.product", ProductController::class)->only([
 ]);
 Route::post("/shopping_list/{shopping_list}/product/{product}/add-to-cart", [ProductController::class, "addToCart"])->name("shopping_list.product.add_to_cart");
 
-Route::get('/home', [HomeController::class, "index"])->name('home');

@@ -26,15 +26,21 @@ class ProductTest extends TestCase
         $attributes = $product->getAttributes();
 
         // Act
-        $response = $this->actingAs($user)
-                         ->post(route("shopping_list.product.store", $shopping_list), $attributes);
+        $response = $this->actingAs($this->user)
+                         ->post(
+                             route(
+                                 "shopping_list.product.store",
+                                 $this->shopping_list
+                             ),
+                             $this->product->attributesToArray()
+                         );
 
         // Re-arrenge
-        $attributes = $product->refresh()->getAttributes();
+        $attributes = $this->product->refresh()->getAttributes();
 
         // Assert
         $this->assertDatabaseHas("products", $attributes);
-        $response->assertRedirect(route("shopping_list.show", $shopping_list));
+        $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
     /**
@@ -52,12 +58,15 @@ class ProductTest extends TestCase
         $product = Product::firstOrFail();
 
         // Act
-        $response = $this->actingAs($user)
-                         ->delete(route("shopping_list.product.destroy", [$shopping_list, $product]));
+        $response = $this->actingAs($this->user)
+                         ->delete(
+                             route("shopping_list.product.destroy",
+                             [$this->shopping_list, $this->product])
+                         );
 
         // Assert
-        $this->assertDatabaseMissing("products", $product->getAttributes());
-        $response->assertRedirect(route("shopping_list.show", $shopping_list));
+        $this->assertDatabaseMissing("products", $this->product->getAttributes());
+        $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
     /**
@@ -84,7 +93,7 @@ class ProductTest extends TestCase
         // Assert
         $edited_product->id = $product->id;
         $this->assertdatabaseHas("products", $edited_product->getAttributes());
-        $response->assertRedirect(route("shopping_list.show", $shopping_list));
+        $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
     /**
@@ -103,21 +112,25 @@ class ProductTest extends TestCase
         $added_quantity = $product->quantity;
 
         // Act
-        $response = $this->actingAs($user)
-                         ->post(route("shopping_list.product.add_to_cart",
-                                      compact(["product", "shopping_list"])),
-                         ["cart_quantity" => $added_quantity]);
-        $product->refresh();
+        $response = $this->actingAs($this->user)
+                         ->post(
+                             route(
+                                 "shopping_list.product.add_to_cart",
+                                 [$this->shopping_list, $this->product]
+                             ),
+                             ["cart_quantity" => $added_quantity]
+                         );
+        $this->product->refresh();
 
         // Assert
-        $attributes = $product->attributesToArray();
+        $attributes = $this->product->attributesToArray();
         $attributes["cart_quantity"] = (float)$added_quantity;
         unset(
             $attributes["created_at"],
             $attributes["updated_at"]
         );
         $this->assertDatabaseHas("products", $attributes);
-        $response->assertRedirect(route("shopping_list.show", $shopping_list));
+        $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
     /**
