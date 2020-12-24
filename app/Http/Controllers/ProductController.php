@@ -29,7 +29,6 @@ class ProductController extends Controller
         // Cast to float
         $attributes["price"] = (float)$attributes["price"];
         $attributes["quantity"] = (float)$attributes["quantity"];
-        $attributes["cart_quantity"] = (float)$attributes["cart_quantity"];
 
         $product = new Product($attributes);
         $shopping_list->products()->save($product);
@@ -58,7 +57,7 @@ class ProductController extends Controller
         $attributes["price"] = (float)$attributes["price"];
         $attributes["quantity"] = (float)$attributes["quantity"];
         $attributes["cart_quantity"] = $product->cart_quantity;
-        // dd($attributes);
+
         $product->setRawAttributes($attributes)->saveOrFail();
         return redirect(route("shopping_list.show", $shopping_list));
     }
