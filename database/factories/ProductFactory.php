@@ -118,7 +118,7 @@ class ProductFactory extends Factory
                 break;
             case "l":
                 return $this->faker->randomElement([
-                    1, 2, 3, 4, 5
+                    1, 1.5, 2, 3, 4, 5
                 ]);
                 break;
             case "g":
@@ -132,7 +132,7 @@ class ProductFactory extends Factory
                 break;
             case "kg":
                 return $this->faker->randomElement([
-                    1, 2, 3, 5
+                    1, 1.5, 2, 2.5, 3, 5
                 ]);
                 break;
         }
