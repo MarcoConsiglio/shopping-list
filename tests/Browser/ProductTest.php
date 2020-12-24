@@ -10,6 +10,41 @@ use Tests\DuskTestCase;
 class ProductTest extends DuskTestCase
 {
     use DatabaseMigrations;
+
+    /**
+     * @var \App\Models\User
+     */
+    private $user;
+
+    /**
+     * @var \App\Models\ShoppingList
+     */
+    private $shopping_list;
+
+    /**
+     * @var \App\Models\Product
+     */
+    private $product;
+
+    /**
+     * @var \App\Models\Product
+     */
+    private $made_product;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user =
+            User::factory()
+                ->has(ShoppingList::factory()
+                    ->has(Product::factory()))
+                ->create();
+        $this->shopping_list = ShoppingList::firstOrFail();
+        $this->product = Product::firstOrFail();
+        $this->made_product = Product::factory()->make();
+    }
+
     /**
      * Un utente può aggiungere un prodotto ad una lista della spesa.
      * @test
@@ -17,11 +52,9 @@ class ProductTest extends DuskTestCase
     public function a_user_can_add_a_product()
     {
         // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory())
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $product = Product::factory()->make();
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
+        $product = $this->product;
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product){
@@ -56,12 +89,9 @@ class ProductTest extends DuskTestCase
      */
     public function a_user_can_add_a_product_to_the_cart() {
         // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory()
-                        ->has(Product::factory()))
-                    ->create();
-            $shopping_list = ShoppingList::firstOrFail();
-            $product = Product::firstOrFail();
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
+        $product = $this->product;
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product) {
@@ -93,12 +123,9 @@ class ProductTest extends DuskTestCase
     public function a_user_can_delete_a_product()
     {
         // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory()
-                        ->has(Product::factory()))
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $product = Product::firstOrFail();
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
+        $product = $this->product;
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product) {
@@ -122,14 +149,10 @@ class ProductTest extends DuskTestCase
     public function a_user_can_update_a_product()
     {
         // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory()
-                        ->has(Product::factory()))
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $product = Product::firstOrFail();
-        $edited_product = Product::factory()->make();
-        $edited_product->id = $product->id;
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
+        $product = $this->product;
+        $edited_product = $this->made_product;
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product, $edited_product) {
@@ -149,7 +172,7 @@ class ProductTest extends DuskTestCase
                             if($edited_product->measure)
                                 $modal->select("measure", $edited_product->measure);
                             $modal->type("note", $edited_product->note)
-                                  ->click("@update_product_{$edited_product->id}_modal_button");
+                                  ->click("@update_product_{$product->id}_modal_button");
                         })
                     ->assertSee($edited_product->name)
                     ->assertSee($edited_product->brand)

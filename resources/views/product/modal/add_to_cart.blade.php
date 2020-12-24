@@ -16,10 +16,10 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text">{{$product->measure === "hg" ? "etti" : $product->measure}}</div>
                             </div>
-                            <input type="number" class="form-control" name="cart_quantity" id="cart_quantity_{{$product->id}}" value="{{$product->quantity}}">
+                            <input type="number" class="form-control" name="cart_quantity" id="cart_quantity_{{$product->id}}" value="{{$product->quantity}}"  @if(in_array($product->measure, ["kg", "l"])) step="0.5" @else step="1" @endif>
                         </div>
                     @else
-                        <input type="number" class="form-control" name="cart_quantity" id="cart_quantity_{{$product->id}}" value="{{$product->quantity}}">
+                        <input type="number" class="form-control" name="cart_quantity" id="cart_quantity_{{$product->id}}" value="{{$product->quantity}}" step="1">
                     @endif
                 </div><!-- .modal-body" -->
                 <div class="modal-footer">
