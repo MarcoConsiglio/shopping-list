@@ -78,7 +78,11 @@ class ProductTest extends DuskTestCase
             if(!$product->measure)
                 $browser->assertSeeIn("@cartQuantity_{$product->id}", "x".number_format($product->quantity, 0, ",", "."));
             else
-                $browser->assertSeeIn("@cartQuantity_{$product->id}", number_format($product->quantity, 0, ",", ".")." ".$product->measure);
+                $browser->assertSeeIn(
+                    "@cartQuantity_{$product->id}",
+                    number_format($product->quantity, 0, ",", ".")
+                    ." ".
+                    $product->measure == "hg" ? "etti" : $product->measure);
         });
     }
 
