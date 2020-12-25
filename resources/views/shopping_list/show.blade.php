@@ -57,13 +57,18 @@
         @foreach ($products->sortByDesc("updated_at")->values()->all() as $product)
           @include("product.show")
         @endforeach
-
         <!-- End table body -->
+        <!-- Prices sum -->
+        <div>
+          <h2 class="display-3 text-center mt-3 mb-5">€ {{number_format($shopping_list->total_price(), 2, ",", ".")}}</h2>
+        </div>
       @else
         <div class="alert alert-secondary my-3">
           La lista è vuota.
         </div>
       @endif
+
+
       <!-- Modals -->
       @include("product.button.add")
       @include("product.modal.add")

@@ -14,6 +14,16 @@ class Product extends Model
     use HasFactory;
 
     /**
+     * @var int Refers to a retail Product.
+     */
+    public const RETAIL = 0;
+
+    /**
+     * @var int Refers to a wholesale Product.
+     */
+    public const WHOLESALE = 1;
+
+    /**
      * Attributes protected from mass assignment.
      *
      * @var array
@@ -39,5 +49,17 @@ class Product extends Model
     public function shoppingLists()
     {
         return $this->belongsTo(ShoppingList::class);
+    }
+
+    /**
+     * Check if this is a retail or wholesale Product.
+     *
+     * @return boolean
+     */
+    public function type() {
+        if($this->measure == null)
+            return self::RETAIL;
+        else
+            return self::WHOLESALE;
     }
 }

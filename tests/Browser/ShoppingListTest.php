@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\Models\{User, ShoppingList, Product};
+use Psy\Command\ShowCommand;
 
 class ShoppingListTest extends DuskTestCase
 {
@@ -171,5 +172,25 @@ class ShoppingListTest extends DuskTestCase
                         ->assertSee("{$product->name}");
             }
         );
+    }
+
+    /**
+     * Ogni lista della spesa ha la somma dei prezzi.
+     * @test
+     */
+    public function every_shopping_list_has_the_sum_of_prices() {
+        // Arrange
+        $user = $this->user;
+        $shopping_list = ShoppingList::firstOrFail();
+        $shopping_list->products()->save(Product::factory()->make());
+        $products = Product::all();
+        $sum = $shopping_list->total_price();
+
+        // Act & Assert
+        $this->browse(function (Browser $browser) use ($user, $shopping_list, $sum) {
+            $browser->loginAs($user)
+                    ->visit(route("shopping_list.show", $shopping_list))
+                    ->assertSee(number_format($sum, 2, ",", "."));
+        });
     }
 }

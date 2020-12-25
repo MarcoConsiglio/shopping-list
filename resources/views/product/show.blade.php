@@ -17,9 +17,9 @@
           <div class="quantity">
             @if($product->measure)
             {{
-                round($product->cart_quantity) == $product->cart_quantity ?
-                number_format($product->cart_quantity, 0, ",", ".") :
-                number_format($product->cart_quantity, 1, ",", ".")
+                round($product->quantity) == $product->quantity ?
+                number_format($product->quantity, 0, ",", ".") :
+                number_format($product->quantity, 1, ",", ".")
             }} {{$product->measure == "hg" ? "etti" : $product->measure}}
             @else
               x{{intval($product->quantity)}}
