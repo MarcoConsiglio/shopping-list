@@ -11,7 +11,43 @@ use App\Models\{User, ShoppingList, Product};
 class ShoppingListTest extends DuskTestCase
 {
     use DatabaseMigrations;
-    use WithFaker;
+
+    /**
+     * @var \App\Models\User
+     */
+    private $user;
+
+    /**
+     * @var \App\Models\ShoppingList
+     */
+    private $shopping_list;
+
+    /**
+     * @var \App\Models\ShoppingList
+     */
+    private $made_shopping_list;
+
+    /**
+     * @var \App\Models\Product
+     */
+    private $product;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user =
+            User::factory()
+                ->has(ShoppingList::factory()
+                    ->has(Product::factory()))
+                ->create();
+
+        $this->shopping_list = ShoppingList::firstOrFail();
+
+        $this->made_shopping_list = ShoppingList::factory()->make();
+
+        $this->product = Product::firstOrFail();
+    }
 
     /**
      * Un utente può vedere una collezione liste della spesa.
@@ -21,10 +57,8 @@ class ShoppingListTest extends DuskTestCase
     {
         // $this->withoutExceptionHandling();
         // Arrange
-        $user =User::factory()
-                   ->has(ShoppingList::factory())
-                   ->create();
-        $shopping_list = ShoppingList::firstOrFail();
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
 
         // Act & Assert
         $this->browse(
@@ -44,11 +78,9 @@ class ShoppingListTest extends DuskTestCase
     public function a_user_can_edit_a_shopping_list()
     {
         // Arrange
-        $user =User::factory()
-                   ->has(ShoppingList::factory())
-                   ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $new_title = $this->faker->sentence(3);
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
+        $new_title = $this->made_shopping_list->title;
 
         // Act & Assert
         $this->browse(
@@ -75,10 +107,8 @@ class ShoppingListTest extends DuskTestCase
     public function a_user_can_delete_a_shopping_list()
     {
         // Arrange
-        $user =User::factory()
-                   ->has(ShoppingList::factory())
-                   ->create();
-        $shopping_list = ShoppingList::firstOrFail();
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
 
         // Act & Assert
         $this->browse(
@@ -102,10 +132,8 @@ class ShoppingListTest extends DuskTestCase
     public function a_user_can_create_a_shopping_list()
     {
         // Arrange
-        $user =User::factory()
-                   ->has(ShoppingList::factory())
-                   ->create();
-        $shopping_list = ShoppingList::firstOrFail();
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
 
         // Act & Assert
         $this->browse(
@@ -130,12 +158,9 @@ class ShoppingListTest extends DuskTestCase
     public function a_user_can_view_a_shopping_list()
     {
         // Arrange
-        $user =User::factory()
-                    ->has(ShoppingList::factory()
-                        ->has(Product::factory()))
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $product = Product::firstOrFail();
+        $user = $this->user;
+        $shopping_list = $this->shopping_list;
+        $product = $this->product;
 
         // Act & Assert
         $this->browse(
