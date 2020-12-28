@@ -25,6 +25,11 @@ class ProductController extends Controller
             "measure"       => "nullable|string",
             "note"          => "nullable|string"
         ]);
+
+        // Cast to float
+        $attributes["price"] = (float)$attributes["price"];
+        $attributes["quantity"] = (float)$attributes["quantity"];
+
         $product = new Product($attributes);
         $shopping_list->products()->save($product);
         return redirect(route("shopping_list.show", $shopping_list));
@@ -47,6 +52,10 @@ class ProductController extends Controller
             "measure"       => "nullable|string",
             "note"          => "nullable|string"
         ]);
+
+        // Cast to float
+        $attributes["price"] = (float)$attributes["price"];
+        $attributes["quantity"] = (float)$attributes["quantity"];
         $attributes["cart_quantity"] = $product->cart_quantity;
         $product->setRawAttributes($attributes)->saveOrFail();
         return redirect(route("shopping_list.show", $shopping_list));
