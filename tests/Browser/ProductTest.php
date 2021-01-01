@@ -153,6 +153,7 @@ class ProductTest extends DuskTestCase
         $shopping_list = $this->shopping_list;
         $product = $this->product;
         $edited_product = $this->made_product;
+        $edited_product->cart_quantity = $product->cart_quantity;
 
         // Act & Assert
         $this->browse(function (Browser $browser) use ($user, $shopping_list, $product, $edited_product) {
@@ -173,7 +174,8 @@ class ProductTest extends DuskTestCase
                                 $modal->select("measure", $edited_product->measure);
                             $modal->type("note", $edited_product->note)
                                   ->click("@update_product_{$product->id}_modal_button");
-                        })
+                    })
+                    ->assertRouteIs("shopping_list.show", compact("shopping_list"))
                     ->assertSee($edited_product->name)
                     ->assertSee($edited_product->brand)
                     ->assertSee(number_format($edited_product->price, 2, ",", ".")  )
@@ -181,8 +183,7 @@ class ProductTest extends DuskTestCase
                     ->assertSee($edited_product->cart_quantity);
             if($edited_product->measure)
                 $browser->assertSee($edited_product->measure);
-            $browser->assertSee($edited_product->note)
-                    ->assertRouteIs("shopping_list.show", compact("shopping_list"));
+            $browser->assertSee($edited_product->note);
         });
     }
 
