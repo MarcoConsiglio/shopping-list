@@ -1,10 +1,11 @@
 language: php
 php:
   - 7.4
+install:
+  - npm install -g npm@latest
 before_script:
-  - composer self-update
   - composer install --no-interaction
-  - npm install
+  - npm install --save-exact
   - npm run dev
 script:
   - php artisan test
