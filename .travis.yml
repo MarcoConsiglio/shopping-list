@@ -3,9 +3,10 @@ php:
   - 7.4
 node_js:
   - 12
-before_script:
+install:
   - composer install --no-interaction
-  - npm install --save-exact
+  - npm install
+after_install:
   - npm run dev
 script:
   - php artisan test
