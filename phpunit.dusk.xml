@@ -22,5 +22,6 @@
     <php>
         <server name="APP_ENV" value="local"/>
         <server name="DB_CONNECTION" value="dusk"/>
+        <server name="DB_DATABASE" value="database/dusk_database.sqlite"/>
     </php>
 </phpunit>
