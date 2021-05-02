@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProduct;
+use App\Http\Requests\UpdateProduct;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Http\Request;
@@ -31,21 +32,11 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ShoppingList $shopping_list, Product $product)
+    public function update(UpdateProduct $request, ShoppingList $shopping_list, Product $product)
     {
-        $attributes = $request->validate([
-            "name"          => "required|min:3|max:50",
-            "brand"         => "max:50",
-            "price"         => "nullable|numeric|min:0|max:1000",
-            "quantity"      => "numeric|min:1|max:1000",
-            "measure"       => "nullable|string",
-            "note"          => "nullable|string"
-        ]);
+        $attributes = $request->validated();
 
         // Cast to float
-        $attributes["price"] = (float)$attributes["price"];
-        $attributes["quantity"] = (float)$attributes["quantity"];
-        $attributes["cart_quantity"] = $product->cart_quantity;
         $product->setRawAttributes($attributes)->saveOrFail();
         return redirect(route("shopping_list.show", $shopping_list));
     }
