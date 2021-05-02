@@ -18,9 +18,7 @@ class ProductController extends Controller
      */
     public function store(StoreProduct $request, ShoppingList $shopping_list)
     {
-        $attributes = $request->validated();
-
-        $product = new Product($attributes);
+        $product = new Product($request->validated());
         $shopping_list->products()->save($product);
         return redirect(route("shopping_list.show", $shopping_list));
     }
@@ -34,10 +32,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProduct $request, ShoppingList $shopping_list, Product $product)
     {
-        $attributes = $request->validated();
-
-        // Cast to float
-        $product->setRawAttributes($attributes)->saveOrFail();
+        $product->setRawAttributes($request->validated())->saveOrFail();
         return redirect(route("shopping_list.show", $shopping_list));
     }
 
