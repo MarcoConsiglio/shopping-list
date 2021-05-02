@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProduct;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Http\Request;
@@ -14,21 +15,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, ShoppingList $shopping_list)
+    public function store(StoreProduct $request, ShoppingList $shopping_list)
     {
-        $attributes = $request->validate([
-            "name"          => "required|min:3|max:50",
-            "brand"         => "nullable|max:50",
-            "price"         => "nullable|numeric|min:0|max:1000",
-            "quantity"      => "numeric|min:1|max:1000",
-            "cart_quantity" => "nullable|numeric|min:0",
-            "measure"       => "nullable|string",
-            "note"          => "nullable|string"
-        ]);
-
-        // Cast to float
-        $attributes["price"] = (float)$attributes["price"];
-        $attributes["quantity"] = (float)$attributes["quantity"];
+        $attributes = $request->validated();
 
         $product = new Product($attributes);
         $shopping_list->products()->save($product);
