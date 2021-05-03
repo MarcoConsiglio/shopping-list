@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PutProduct;
+use App\Http\Requests\StoreProduct;
+use App\Http\Requests\UpdateProduct;
 use App\Models\Product;
 use App\Models\ShoppingList;
 use Illuminate\Http\Request;
@@ -14,23 +17,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, ShoppingList $shopping_list)
+    public function store(StoreProduct $request, ShoppingList $shopping_list)
     {
-        $attributes = $request->validate([
-            "name"          => "required|min:3|max:50",
-            "brand"         => "nullable|max:50",
-            "price"         => "nullable|numeric|min:0|max:1000",
-            "quantity"      => "numeric|min:1|max:1000",
-            "cart_quantity" => "nullable|numeric|min:0",
-            "measure"       => "nullable|string",
-            "note"          => "nullable|string"
-        ]);
-
-        // Cast to float
-        $attributes["price"] = (float)$attributes["price"];
-        $attributes["quantity"] = (float)$attributes["quantity"];
-
-        $product = new Product($attributes);
+        $product = new Product($request->validated());
         $shopping_list->products()->save($product);
         return redirect(route("shopping_list.show", $shopping_list));
     }
@@ -42,22 +31,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ShoppingList $shopping_list, Product $product)
+    public function update(UpdateProduct $request, ShoppingList $shopping_list, Product $product)
     {
-        $attributes = $request->validate([
-            "name"          => "required|min:3|max:50",
-            "brand"         => "max:50",
-            "price"         => "nullable|numeric|min:0|max:1000",
-            "quantity"      => "numeric|min:1|max:1000",
-            "measure"       => "nullable|string",
-            "note"          => "nullable|string"
-        ]);
-
-        // Cast to float
-        $attributes["price"] = (float)$attributes["price"];
-        $attributes["quantity"] = (float)$attributes["quantity"];
-        $attributes["cart_quantity"] = $product->cart_quantity;
-        $product->setRawAttributes($attributes)->saveOrFail();
+        $product->setRawAttributes($request->validated())->saveOrFail();
         return redirect(route("shopping_list.show", $shopping_list));
     }
 
@@ -69,11 +45,8 @@ class ProductController extends Controller
      * @param \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function addToCart(Request $request, ShoppingList $shopping_list, Product $product) {
-        $attributes = $request->validate([
-            "cart_quantity" => "numeric|min:0"
-        ]);
-        $product->cart_quantity = $attributes["cart_quantity"];
+    public function addToCart(PutProduct $request, ShoppingList $shopping_list, Product $product) {
+        $product->cart_quantity = $request->input("cart_quantity");
         $product->saveOrFail();
         return redirect(route("shopping_list.show", compact("shopping_list")));
     }
