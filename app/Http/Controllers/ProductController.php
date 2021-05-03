@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PutProduct;
 use App\Http\Requests\StoreProduct;
 use App\Http\Requests\UpdateProduct;
 use App\Models\Product;
@@ -44,11 +45,8 @@ class ProductController extends Controller
      * @param \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function addToCart(Request $request, ShoppingList $shopping_list, Product $product) {
-        $attributes = $request->validate([
-            "cart_quantity" => "numeric|min:0"
-        ]);
-        $product->cart_quantity = $attributes["cart_quantity"];
+    public function addToCart(PutProduct $request, ShoppingList $shopping_list, Product $product) {
+        $product->cart_quantity = $request->input("cart_quantity");
         $product->saveOrFail();
         return redirect(route("shopping_list.show", compact("shopping_list")));
     }
