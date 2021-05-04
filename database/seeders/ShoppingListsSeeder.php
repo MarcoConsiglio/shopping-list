@@ -13,12 +13,15 @@ class ShoppingListsSeeder extends Seeder
     public function run()
     {
         $users = User::all();
-        foreach($users as $user)
-        {
-            $user->shopping_lists()
-                 ->saveMany(
-                    factory(ShoppingList::class, 3)->make()
-                 );
-        }
+        if($users)
+            foreach($users as $user)
+            {
+                $user->shoppingLists()
+                     ->saveMany(
+                        ShoppingList::factory()->count(3)->make()
+                     );
+            }
+        else
+            $this->command->alert("There is no user to assign a shopping list.");
     }
 }
