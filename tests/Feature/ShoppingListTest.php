@@ -51,12 +51,14 @@ class ShoppingListTest extends TestCase
         // $this->withoutExceptionHandling();
         // Arrange in setUp()
 
+
         // Act
         $response = $this->get(route("shopping_list.index", $this->shopping_list));
 
         // Assert
         $response->assertViewIs("shopping_list.index")
-                 ->assertSee($this->shopping_list->title);
+                 ->assertSee($this->shopping_list->title)
+                 ->assertSee($this->product);
     }
 
     /**
@@ -68,6 +70,12 @@ class ShoppingListTest extends TestCase
     {
         // $this->withoutExceptionHandling();
         // Arrange in setUp()
+        $this->shopping_list->products()->save($deleted_product = Product::factory()->make());
+        $deleted_product->fresh();
+        // Simula il prodotto nel carrello.
+        $deleted_product->cart_quantity = 1;
+        $deleted_product->save();
+        $deleted_product->delete();
 
         // Act
         $response = $this->get(route("shopping_list.show", $this->shopping_list));
@@ -76,6 +84,7 @@ class ShoppingListTest extends TestCase
         // Assert
         $response->assertViewIs("shopping_list.show");
         $response->assertSee($this->product->name);
+        $response->assertSee($deleted_product->name);
     }
 
 

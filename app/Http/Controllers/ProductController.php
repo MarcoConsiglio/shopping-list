@@ -48,6 +48,7 @@ class ProductController extends Controller
     public function addToCart(PutProduct $request, ShoppingList $shopping_list, Product $product) {
         $product->cart_quantity = $request->input("cart_quantity");
         $product->saveOrFail();
+        $product->delete();
         return redirect(route("shopping_list.show", compact("shopping_list")));
     }
 
@@ -59,7 +60,7 @@ class ProductController extends Controller
      */
     public function destroy(ShoppingList $shopping_list, Product $product)
     {
-        $product->delete();
+        $product->forceDelete();
         return redirect(route("shopping_list.show", $shopping_list));
     }
 

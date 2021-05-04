@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\{User, ShoppingList, Product};
+use Illuminate\Support\Facades\DB;
 
 class ProductTest extends TestCase
 {
@@ -81,7 +82,7 @@ class ProductTest extends TestCase
                          );
 
         // Assert
-        $this->assertDatabaseMissing("products", $this->product->getAttributes());
+        $this->assertDeleted($this->product);
         $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
@@ -124,12 +125,7 @@ class ProductTest extends TestCase
         $this->product->refresh();
 
         // Assert
-        $attributes = $this->product->attributesToArray();
-        unset(
-            $attributes["created_at"],
-            $attributes["updated_at"]
-        );
-        $this->assertDatabaseHas("products", $attributes);
+        $this->assertSoftDeleted($this->product);
         $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
