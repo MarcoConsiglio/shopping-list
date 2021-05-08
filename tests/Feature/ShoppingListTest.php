@@ -57,8 +57,7 @@ class ShoppingListTest extends TestCase
 
         // Assert
         $response->assertViewIs("shopping_list.index")
-                 ->assertSee($this->shopping_list->title)
-                 ->assertSee($this->product);
+                 ->assertSee($this->shopping_list->title);
     }
 
     /**
@@ -68,7 +67,7 @@ class ShoppingListTest extends TestCase
      */
     public function a_user_can_view_shopping_list_items()
     {
-        // $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
         // Arrange in setUp()
         $this->shopping_list->products()->save($deleted_product = Product::factory()->make());
         $deleted_product->fresh();
