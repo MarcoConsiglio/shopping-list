@@ -40,8 +40,9 @@ class ShoppingListController extends Controller
      */
     public function show(ShoppingList $shopping_list)
     {
-        dd($shopping_list->products()->trashed());
-        return view("shopping_list.show", compact("shopping_list"))->with("products_in_the_cart", $shopping_list->products()->trashed());
+        return view("shopping_list.show", compact("shopping_list"))
+             ->with("products_in_the_cart",
+                $shopping_list->products()->onlyTrashed()->get());
     }
 
     /**

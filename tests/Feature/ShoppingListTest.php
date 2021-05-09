@@ -26,6 +26,7 @@ class ShoppingListTest extends TestCase
                     ->has(Product::factory())
                 )->create();
         $this->be($this->user);
+
         /**
          * @var \App\Models\ShoppingList
          */
@@ -67,14 +68,12 @@ class ShoppingListTest extends TestCase
      */
     public function a_user_can_view_shopping_list_items()
     {
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
         // Arrange in setUp()
-        $this->shopping_list->products()->save($deleted_product = Product::factory()->make());
-        $deleted_product->fresh();
-        // Simula il prodotto nel carrello.
-        $deleted_product->cart_quantity = 1;
-        $deleted_product->save();
-        $deleted_product->delete();
+        $this->shopping_list->products()
+             ->save($product_in_the_cart = Product::factory()->taken()->make());
+        $product_in_the_cart->fresh();
+
 
         // Act
         $response = $this->get(route("shopping_list.show", $this->shopping_list));
@@ -83,7 +82,7 @@ class ShoppingListTest extends TestCase
         // Assert
         $response->assertViewIs("shopping_list.show");
         $response->assertSee($this->product->name);
-        $response->assertSee($deleted_product->name);
+        $response->assertSee($product_in_the_cart->name);
     }
 
 

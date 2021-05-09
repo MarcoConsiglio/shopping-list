@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Product;
 use App\Models\Enumerations\ProductType;
 use App\Models\Enumerations\ProductMeasure;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -144,5 +145,20 @@ class ProductFactory extends Factory
                 ]);
                 break;
         }
+    }
+
+    /**
+     * Set the Product is taken.
+     *
+     * @return void
+     */
+    public function taken()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                "cart_quantity" => $attributes["quantity"],
+                "deleted_at" => Carbon::now()
+            ];
+        });
     }
 }
