@@ -6,39 +6,41 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\{User, ShoppingList, Product};
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
+    /**
+     * @var \App\Models\ShoppingList
+     */
+    protected $shopping_list;
+
+    /**
+     * @var \App\Models\Product
+     */
+    protected $product;
+
+    /**
+     * @var \App\Models\Product
+     */
+    protected $made_product;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        /**
-         * @var \App\Models\User
-         */
-        $this->user =
-            User::factory()
-                ->has(ShoppingList::factory()
-                    ->has(Product::factory()))
-                ->create();
+        $this->user =  User::factory()
+            ->has(ShoppingList::factory()
+                ->has(Product::factory()))
+            ->create();
 
-        /**
-         * @var \App\Models\ShoppingList
-         */
         $this->shopping_list = ShoppingList::firstOrFail();
-
-        /**
-         * @var \App\Models\Product
-         */
         $this->product = Product::firstOrFail();
-
-        /**
-         * @var \App\Models\Product
-         */
         $this->made_product = Product::firstOrFail();
-
     }
 
     /**
@@ -52,13 +54,13 @@ class ProductTest extends TestCase
 
         // Act
         $response = $this->actingAs($this->user)
-                         ->post(
-                             route(
-                                 "shopping_list.product.store",
-                                 $this->shopping_list
-                             ),
-                             $this->made_product->attributesToArray()
-                         );
+            ->post(
+                route(
+                    "shopping_list.product.store",
+                    $this->shopping_list
+                ),
+                $this->made_product->attributesToArray()
+            );
 
         // Assert
         $attributes = $this->made_product->refresh()->getAttributes();
@@ -75,13 +77,15 @@ class ProductTest extends TestCase
         // Arrange in setUp()
         // Act
         $response = $this->actingAs($this->user)
-                         ->delete(
-                             route("shopping_list.product.destroy",
-                             [$this->shopping_list, $this->product])
-                         );
+            ->delete(
+                route(
+                    "shopping_list.product.destroy",
+                    [$this->shopping_list, $this->product]
+                )
+            );
 
         // Assert
-        $this->assertDatabaseMissing("products", $this->product->getAttributes());
+        $this->assertDeleted($this->product);
         $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
@@ -96,8 +100,10 @@ class ProductTest extends TestCase
 
         // Act
         $response = $this->actingAs($this->user)
-                         ->put(route("shopping_list.product.update", [$this->shopping_list, $this->product]),
-                                     $this->made_product->getAttributes());
+            ->put(
+                route("shopping_list.product.update", [$this->shopping_list, $this->product]),
+                $this->made_product->getAttributes()
+            );
 
         // Assert
         $this->made_product->refresh();
@@ -109,27 +115,23 @@ class ProductTest extends TestCase
      * Un utente può aggiungere un prodotto al carrello.
      * @test
      */
-    public function a_user_can_add_a_product_to_the_cart() {
+    public function a_user_can_add_a_product_to_the_cart()
+    {
         // Arrange in setUp()
 
         // Act
         $response = $this->actingAs($this->user)
-                         ->post(
-                             route(
-                                 "shopping_list.product.add_to_cart",
-                                 [$this->shopping_list, $this->product]
-                             ),
-                             ["cart_quantity" => $this->product->quantity]
-                         );
+            ->post(
+                route(
+                    "shopping_list.product.add_to_cart",
+                    [$this->shopping_list, $this->product]
+                ),
+                ["cart_quantity" => $this->product->quantity]
+            );
         $this->product->refresh();
 
         // Assert
-        $attributes = $this->product->attributesToArray();
-        unset(
-            $attributes["created_at"],
-            $attributes["updated_at"]
-        );
-        $this->assertDatabaseHas("products", $attributes);
+        $this->assertSoftDeleted($this->product);
         $response->assertRedirect(route("shopping_list.show", $this->shopping_list));
     }
 
@@ -137,19 +139,40 @@ class ProductTest extends TestCase
      * Un utente non può aggiungere una quantità negativa al carrello.
      * @test
      */
-    public function a_user_cant_add_negative_quantity_to_the_cart() {
+    public function a_user_cant_add_negative_quantity_to_the_cart()
+    {
         // Arrange in setUp()
 
         // Act
         $response = $this->actingAs($this->user)
-                         ->post(route("shopping_list.product.add_to_cart", [
-                                    $this->shopping_list,
-                                    $this->product
-                                ]),
-                    ["cart_quantity" => 0 - $this->faker->randomDigitNotNull()]);
+            ->post(
+                route("shopping_list.product.add_to_cart", [
+                    $this->shopping_list,
+                    $this->product
+                ]),
+                ["cart_quantity" => 0 - $this->faker->randomDigitNotNull()]
+            );
         $this->product->refresh();
 
         // Assert
         $response->assertSessionHasErrors(["cart_quantity"]);
+    }
+
+    /**
+     * Un utente può utilizzare un prodotto messo nel carrello.
+     * @test
+     */
+    public function a_user_can_query_soft_deleted_products()
+    {
+        // Arrange in setUp()
+        $this->product->delete();
+
+        // Act
+        $response = $this->actingAs($this->user)
+            ->get(route("shopping_list.show", [$this->shopping_list]));
+
+        // Assert
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertSee($this->product->name);
     }
 }

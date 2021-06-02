@@ -26,6 +26,7 @@ class ShoppingListTest extends TestCase
                     ->has(Product::factory())
                 )->create();
         $this->be($this->user);
+
         /**
          * @var \App\Models\ShoppingList
          */
@@ -51,6 +52,7 @@ class ShoppingListTest extends TestCase
         // $this->withoutExceptionHandling();
         // Arrange in setUp()
 
+
         // Act
         $response = $this->get(route("shopping_list.index", $this->shopping_list));
 
@@ -68,6 +70,10 @@ class ShoppingListTest extends TestCase
     {
         // $this->withoutExceptionHandling();
         // Arrange in setUp()
+        $this->shopping_list->products()
+             ->save($product_in_the_cart = Product::factory()->taken()->make());
+        $product_in_the_cart->fresh();
+
 
         // Act
         $response = $this->get(route("shopping_list.show", $this->shopping_list));
@@ -76,6 +82,7 @@ class ShoppingListTest extends TestCase
         // Assert
         $response->assertViewIs("shopping_list.show");
         $response->assertSee($this->product->name);
+        $response->assertSee($product_in_the_cart->name);
     }
 
 
