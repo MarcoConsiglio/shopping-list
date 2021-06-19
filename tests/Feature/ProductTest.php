@@ -146,10 +146,7 @@ class ProductTest extends TestCase
         // Act
         $response = $this->actingAs($this->user)
             ->post(
-                route("shopping_list.product.add_to_cart", [
-                    $this->shopping_list,
-                    $this->product
-                ]),
+                route("shopping_list.product.add_to_cart", [$this->shopping_list, $this->product]),
                 ["cart_quantity" => 0 - $this->faker->randomDigitNotNull()]
             );
         $this->product->refresh();
@@ -159,10 +156,10 @@ class ProductTest extends TestCase
     }
 
     /**
-     * Un utente può utilizzare un prodotto messo nel carrello.
+     * Un utente può vedere un prodotto messo nel carrello.
      * @test
      */
-    public function a_user_can_query_soft_deleted_products()
+    public function a_user_can_view_product_in_the_cart()
     {
         // Arrange in setUp()
         $this->product->delete();
@@ -174,5 +171,26 @@ class ProductTest extends TestCase
         // Assert
         $response->assertStatus(Response::HTTP_OK);
         $response->assertSee($this->product->name);
+    }
+
+    /**
+     * Un utente può rimuovere un prodotto dal carrello.
+     * @test
+     */
+    public function a_user_can_remove_a_product_from_the_cart()
+    {
+        // Arrange in setUp()
+        $this->product->cart_quantity = $this->product->quantity;
+
+        // Act
+        $response = $this->actingAs($this->user)
+            ->post(
+                route("shopping_list.product.add_to_cart", [$this->shopping_list, $this->product]),
+                ["cart_quantity" => 0]
+            );
+        $this->product->refresh();
+
+        // Assert
+        $this->assertEquals(false, $this->product->trashed());
     }
 }

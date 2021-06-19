@@ -48,7 +48,10 @@ class ProductController extends Controller
     public function addToCart(PutProduct $request, ShoppingList $shopping_list, Product $product) {
         $product->cart_quantity = $request->input("cart_quantity");
         $product->saveOrFail();
-        $product->delete();
+        if ($product->cart_quantity > 0)
+            $product->delete();
+        else
+            $product->restore();
         return redirect(route("shopping_list.show", compact("shopping_list")));
     }
 
