@@ -5,13 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ShoppingList;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Represents a Product in a ShoppingList.
+ *
+ * @property        int                         $id
+ * @property        string                      $name
+ * @property        string                      $brand
+ * @property        float                       $price
+ * @property        float                       $quantity
+ * @property        float                       $cart_quantity
+ * @property        string                      $measure
+ * @property        string                      $note
+ * @property        int                         $shopping_list_id
+ * @property-read   \App\Models\ShoppingList    $shoppingList
  */
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * @var int Refers to a retail Product.
@@ -46,7 +58,7 @@ class Product extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function shoppingLists()
+    public function shoppingList()
     {
         return $this->belongsTo(ShoppingList::class);
     }
@@ -61,5 +73,15 @@ class Product extends Model
             return self::RETAIL;
         else
             return self::WHOLESALE;
+    }
+
+    /**
+     * Check if this Product is in the cart.
+     *
+     * @return boolean
+     */
+    public function inTheCart()
+    {
+        return $this->cart_quantity > 0 ? true : false;
     }
 }

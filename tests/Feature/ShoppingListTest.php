@@ -5,13 +5,43 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
-use App\Models\ShoppingList;
+use App\Models\{User, Product, ShoppingList};
 
 class ShoppingListTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
+
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /**
+         * @var \App\Models\User
+         */
+        $this->user =
+            User::factory()
+                ->has(ShoppingList::factory()
+                    ->has(Product::factory())
+                )->create();
+        $this->be($this->user);
+
+        /**
+         * @var \App\Models\ShoppingList
+         */
+        $this->shopping_list = ShoppingList::firstOrFail();
+
+        /**
+         * @var \App\Models\ShoppingList
+         */
+        $this->edited_shopping_list = ShoppingList::factory()->make();
+
+        /**
+         * @var \App\Models\Product
+         */
+        $this->product = Product::find(1);
+    }
 
     /**
      * Un utente può vedere la collezione delle sue liste della spesa.
@@ -20,41 +50,39 @@ class ShoppingListTest extends TestCase
     public function a_user_can_view_shopping_lists_index()
     {
         // $this->withoutExceptionHandling();
-        // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory())
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $this->be($user);
+        // Arrange in setUp()
+
 
         // Act
-        $response = $this->get(route("shopping_list.index", $shopping_list));
+        $response = $this->get(route("shopping_list.index", $this->shopping_list));
 
         // Assert
         $response->assertViewIs("shopping_list.index")
-                 ->assertSee($shopping_list->title);
+                 ->assertSee($this->shopping_list->title);
     }
 
     /**
      * Un utente può vedere gli elementi di una lista della spesa.
+     * Gli elementi inseriti nel carrello si vedono in fondo alla vista.
      * @test
      */
     public function a_user_can_view_shopping_list_items()
     {
-        $this->withoutExceptionHandling();
-        // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory())
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $this->be($user);
+        // $this->withoutExceptionHandling();
+        // Arrange in setUp()
+        $this->shopping_list->products()
+             ->save($product_in_the_cart = Product::factory()->taken()->make());
+        $product_in_the_cart->fresh();
+
 
         // Act
-        $response = $this->get(route("shopping_list.show", $shopping_list));
+        $response = $this->get(route("shopping_list.show", $this->shopping_list));
         // dd($response->content());
 
         // Assert
         $response->assertViewIs("shopping_list.show");
+        $response->assertSee($this->product->name);
+        $response->assertSee($product_in_the_cart->name);
     }
 
 
@@ -65,25 +93,20 @@ class ShoppingListTest extends TestCase
     public function a_user_can_edit_shopping_list()
     {
         // $this->withoutExceptionHandling();
-        // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory())
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $this->be($user);
-        $edited_shopping_list = ShoppingList::factory()->make();
-        $attributes = $edited_shopping_list->getAttributes();
+        // Arrange in setUp()
+        $attributes = $this->edited_shopping_list->attributesToArray();
+        unset($attributes["created_at"]);
         unset($attributes["updated_at"]);
 
         // Act
         $response = $this->put(
-            route("shopping_list.update", $shopping_list),
+            route("shopping_list.update", $this->shopping_list),
             $attributes
         );
 
         // Assert
         $response->assertRedirect(route("shopping_list.index"));
-        $this->assertDatabaseHas("shopping_lists", $attributes);
+        $this->assertDatabaseHas("shopping_lists", $this->edited_shopping_list->attributesToArray());
     }
 
     /**
@@ -92,22 +115,16 @@ class ShoppingListTest extends TestCase
      */
     public function a_user_can_delete_a_shopping_list()
     {
-        // Arrange
-        $user = User::factory()
-                    ->has(ShoppingList::factory())
-                    ->create();
-        $shopping_list = ShoppingList::firstOrFail();
-        $attributes = $shopping_list->getAttributes();
-        $this->be($user);
+        // Arrange in setUp)=
 
         // Act
         $response = $this->delete(
-            route("shopping_list.destroy", $shopping_list)
+            route("shopping_list.destroy", $this->shopping_list)
         );
 
         // Assert
         $response->assertRedirect(route("shopping_list.index"));
-        $this->assertDatabaseMissing("shopping_lists", $attributes);
+        $this->assertDatabaseMissing("shopping_lists", $this->shopping_list->attributesToArray());
     }
 
     /**
@@ -117,19 +134,15 @@ class ShoppingListTest extends TestCase
     public function a_user_can_create_a_shopping_list()
     {
         // Arrange
-        $user = User::factory()->create();
-        $shopping_list = ShoppingList::factory()->make();
-        $attributes = $shopping_list->getAttributes();
-        $this->be($user);
 
         // Act
         $response = $this->post(
             route("shopping_list.store"),
-            $attributes
+            $this->edited_shopping_list->attributesToArray()
         );
 
         // Assert
-        $this->assertDatabaseHas("shopping_lists", $attributes);
+        $this->assertDatabaseHas("shopping_lists", $this->edited_shopping_list->attributesToArray());
         $response->assertRedirect(route("shopping_list.index"));
     }
 }

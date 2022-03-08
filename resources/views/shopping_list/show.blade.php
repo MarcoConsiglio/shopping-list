@@ -53,8 +53,11 @@
           </div>
       @endif
 
-      @if($products->count())
+      @if($products->count() + $products_in_the_cart->count())
         @foreach ($products->sortByDesc("updated_at")->values()->all() as $product)
+          @include("product.show")
+        @endforeach
+        @foreach ($products_in_the_cart as $product)
           @include("product.show")
         @endforeach
         <!-- End table body -->
@@ -73,7 +76,7 @@
       @include("product.button.add")
       @include("product.modal.add")
 
-      @foreach ($products as $product)
+      @foreach ($products->merge($products_in_the_cart)->all() as $product)
         @include("product.modal.delete")
         @include("product.modal.edit")
         @include("product.modal.add_to_cart")
